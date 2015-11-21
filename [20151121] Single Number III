@@ -1,0 +1,21 @@
+// startTime: 10: 46
+// finishTime: 10: 59
+// https://leetcode.com/problems/single-number-iii/
+
+/*
+因为可以用多余的空间，所以就简单多了，这里用的多余空间大概是n/2, 时间复杂度是 O(n)
+*/
+
+public class Solution {
+    public int[] singleNumber(int[] nums) {
+        Set<Integer> set = new HashSet<Integer>();
+        for (int i : nums){
+            if (set.add(i) == false) set.remove(i);
+        }
+        int[] res = new int[2];
+        int i = 0;
+        Iterator<Integer> it = set.iterator();
+        while(it.hasNext()) res[i++] = it.next(); 
+        return res;
+    }
+}
