@@ -1,0 +1,24 @@
+// startTime: 11: 12
+// finishTime: 11: 21
+// https://leetcode.com/problems/two-sum/
+
+public class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        if (nums.length < 2) return new int[2];
+        HashMap<Integer, Integer> mp = new HashMap<Integer, Integer>();
+        int[] res = new int[2];
+        for (int i = 0; i < nums.length; i++){
+            if (mp.containsKey(target - nums[i])){
+                res[1] = i + 1;
+                res[0] = mp.get(target - nums[i]);
+            }
+            else mp.put(nums[i], i + 1);
+        }
+        return res;
+    }
+}
+/*
+这个方法就是利用了一个HashMap，key为数组的值，value为indice，所以遍历一遍数组，若是target - nums[i]的数存在在hashmap中，则将两个
+indice，这里注意因为要求输出为从小到大，所以res数组的赋值顺序注意一下，可以避免最后的排序工作。若是没有存在在hashmap中，就将这个
+数字与它的indice存放在hashmap中，以备后面的使用。
+*/
