@@ -1,0 +1,31 @@
+// startTime: 10: 08
+// finishTime: 10: 50
+// https://leetcode.com/problems/unique-paths/
+
+/*
+这道题最开始做出现了问题，问题在于我用dp数组只存储了从当前节点往下走会不会走到终点，dp里面只有0，-1，1，然后通过第二个if条件来对全局
+变量count进行++操作，可是最后得到的count值比真实值小很多，这是因为，我到达一个点虽然知道后面可以到达终点，但是我对count只加了1，但是
+其实后面走的路径数远大于1，所以只加1是错误的，改正过的版本里，dp中存储的是从当前节点往下走有多少种不同的路径，如果走不到则统一为-1。
+*/
+
+public class Solution {
+    public int uniquePaths(int m, int n) {
+        return helper(0, 0, m, n, new int[m][n]);
+    }
+    public int helper(int i, int j, int m, int n, int[][]dp){
+        if ((i >= m || j >= n) || dp[i][j] == -1) return -1;
+        if ((i == m - 1 || j == n - 1)) {
+            return 1;
+        }
+        if (dp[i][j] > 0) return dp[i][j];
+        
+        int right = helper(i, j + 1, m, n, dp);
+        int down = helper(i + 1, j, m, n, dp);
+        
+        if (right > 0 && down > 0) dp[i][j] = right + down;
+        else if (right > 0 || down > 0) dp[i][j] = right > 0 ? right : down;
+        else dp[i][j] = -1;
+        
+        return dp[i][j];
+    }
+}
