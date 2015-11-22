@@ -1,0 +1,24 @@
+// startTime: 11: 32
+// finishTime: 11: 47
+// https://leetcode.com/problems/triangle/
+
+public class Solution {
+    public int minimumTotal(List<List<Integer>> triangle) {
+        int row = triangle.size();
+        if (row <= 0) return 0;
+        int[] helper = new int[row + 1];
+        for (int i = row - 1; i >= 0; i--){
+            List<Integer> tmp = triangle.get(i);
+            for (int j = 0; j < tmp.size(); j++){
+                helper[j] = Math.min(helper[j], helper[j + 1]) + tmp.get(j);
+            }
+        }
+        return helper[0];
+    }
+}
+/*
+对于这种动态规划的问题，如果从上到下分析的话就得用递归，从下到上分析就用dp数组就可以了，在这里面就用了dp数组。
+对于每一层中的每个节点来说，从下面上来的可能有两条路径，那对于该节点它只需要选择出它想要选的路径往上继续走就
+好，因为题目中要求的是和最小的，所以我们选择的是数值比较小的。然后将现在的节点的数值更新成下面上来的数值加上
+该节点的值，由此向上推，即可得到结果。
+*/
