@@ -1,0 +1,24 @@
+// 这个只需要对上一道题进行一点修改就好。
+// https://leetcode.com/problems/subsets-ii/
+
+public class Solution {
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        List<List<Integer>> res = new ArrayList<List<Integer>>();
+        res.add(new ArrayList<Integer>());
+        if (nums.length == 0) return res;
+        Arrays.sort(nums);
+        for (int i : nums){
+            List<List<Integer>> tmpres = new ArrayList<List<Integer>>();
+            for (List<Integer> l : res){
+                List<Integer> tmp = new ArrayList<Integer>();
+                tmp.addAll(l);
+                tmp.add(i);
+                if (!tmpres.contains(tmp)) tmpres.add(tmp);
+            }
+            for (List<Integer> l : tmpres){
+                if (!res.contains(l)) res.add(l);
+            }
+        }
+        return res;
+    }
+}
