@@ -1,0 +1,33 @@
+// startTime: 10: 57
+// finishTime: 11: 03
+// https://leetcode.com/problems/unique-paths-ii/
+
+public class Solution {
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        int m = obstacleGrid.length;
+        if (m == 0) return 0;
+        int n = obstacleGrid[0].length;
+        int res = helper(obstacleGrid, 0, 0, m, n, new int[m][n]);
+        return res > 0 ? res : 0;
+    }
+    
+    public int helper(int[][] obstacleGrid, int i, int j, int m, int n, int[][]dp){
+        if ((i >= m || j >= n) || dp[i][j] == -1 || obstacleGrid[i][j] == 1) return -1;
+        if (i == m - 1 && j == n - 1 && obstacleGrid[i][j] == 0) {           //---------------------------01
+            return 1;
+        }
+        if (dp[i][j] > 0) return dp[i][j];
+        
+        int right = helper(obstacleGrid, i, j + 1, m, n, dp);
+        int down = helper(obstacleGrid, i + 1, j, m, n, dp);
+        
+        if (right > 0 && down > 0) dp[i][j] = right + down;
+        else if (right > 0 || down > 0) dp[i][j] = right > 0 ? right : down;
+        else dp[i][j] = -1;
+        
+        return dp[i][j];
+    }
+}
+/*
+这道题其实就是刚才那道题加一个限制条件，所以在01处，应该进行一个非1判断，并且也不能只是走到边边上就默认为可以到达了。
+*/
