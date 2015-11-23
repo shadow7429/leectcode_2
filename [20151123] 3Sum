@@ -1,0 +1,36 @@
+// startTime: 10: 45
+// finishTime: 11: 00
+// https://leetcode.com/problems/3sum/
+
+/*
+因为以防数组中有重复的数字，所以加入了下面注释的部分，就是说那些只能是重复的答案，所以直接过滤掉就可以了。
+但是不能在和不等于target的时候进行过滤，因为他们未来是要加在一起的。
+*/
+public class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        List<List<Integer>> res = new ArrayList<List<Integer>>();
+        if (nums.length == 0) return res;
+        Arrays.sort(nums);
+        for (int i = 0; i < nums.length - 2; i++){
+            int target = 0 - nums[i];
+            int lo = i + 1;
+            int hi = nums.length - 1;
+            while (lo < hi){
+                if (nums[lo] + nums[hi] > target) hi --;
+                else if (nums[lo] + nums[hi] < target) lo ++;
+                else {
+                    List<Integer> tmp = new ArrayList<Integer>();
+                    tmp.add(nums[i]);
+                    tmp.add(nums[lo]);
+                    tmp.add(nums[hi]);
+                    if (!res.contains(tmp)) res.add(tmp);
+                    while (lo < hi && nums[lo] == nums[lo + 1]) lo ++;            //--------------01
+                    while (lo < hi && nums[hi] == nums[hi - 1]) hi--;             //--------------02
+                    lo ++;
+                    hi --;
+                }
+            }
+        }
+        return res;
+    }
+}
