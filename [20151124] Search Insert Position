@@ -1,0 +1,41 @@
+// startTime: 11: 07
+// finishTime: 11: 10
+// https://leetcode.com/problems/search-insert-position/
+
+/*
+这道题非常简单，第一反应是遍历一遍，因为原来的数组已经排好序了，只要找到当前数组的数是>=target的就返回这个index即可，如果最后都没返回，
+就应该在数组的最后添加，所以返回数组大小即可。
+*/
+
+public class Solution {
+    public int searchInsert(int[] nums, int target) {
+        int res = 0;
+        for (int i = 0; i < nums.length; i++){
+            if (nums[i] >= target) return i;
+        }
+        return nums.length;
+    }
+}
+
+/*
+改进方法可以是用二叉搜索，因为low和hi一直向中间聚集，每次我们用mid跟target比，如果mid > target，则hi = mid - 1，所以可知道每次的hi + 1
+位置处的nums都是大于target的，所以过程中，或者恰好找到等于target的index，或者是走到最后当low > hi的时候，也就是等于hi + 1的时候，则
+返回low。
+*/
+public class Solution {
+    public int searchInsert(int[] nums, int target) {
+        int low = 0; 
+        int hi = nums.length - 1;
+        while (low <= hi){
+            int mid = low + (hi - low) / 2;
+            if (nums[mid] == target) return mid;
+            else if (nums[mid] > target) hi = mid - 1;
+            else low = mid + 1;
+        }
+        return low;
+    }
+}
+
+
+
+
