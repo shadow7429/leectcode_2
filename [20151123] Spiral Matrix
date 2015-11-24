@@ -1,0 +1,28 @@
+// startTime: 15 : 00
+// finishTime: 15: 59
+// https://leetcode.com/problems/spiral-matrix/
+
+/*
+遇到这种硬算的题就有点乱，这道题其实比较简单，就找坐标的添加规律就行了，需要注意的是对临界条件的判断，以及在求Math.ceil的时候，
+里面得是double或float型才能起到五入的作用，所以做出了这样的操作Math.ceil(cycle / 2.);
+*/
+
+public class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> res = new ArrayList<Integer>();
+        if (matrix.length == 0 || matrix[0].length == 0) return res;
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int cycle = Math.min(m, n);
+        
+        cycle = (int)Math.ceil(cycle / 2.);
+        
+        for (int i = 0; i < cycle; i++){
+            for (int j = i; j < n - i; j++) res.add(matrix[i][j]);
+            for (int j = i + 1; j < m - i; j++) res.add(matrix[j][n - i - 1]);
+            if (i != m - i - 1) for (int j = n - i - 2; j >= i; j--) res.add(matrix[m - i - 1][j]);
+            if (n - i- 1 != i)  for (int j = m - i - 2; j > i; j--) res.add(matrix[j][i]);
+        }
+        return res;
+    }
+}
