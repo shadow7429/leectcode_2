@@ -23,6 +23,7 @@ public class Solution {
 返回low。
 */
 public class Solution {
+    // 排序的时候不能让low和hi相同，限制条件是while(lo < hi), 但是搜索的时候是while (lo <= hi)
     public int searchInsert(int[] nums, int target) {
         int low = 0; 
         int hi = nums.length - 1;
