@@ -1,0 +1,30 @@
+// startTime: 11: 38
+// finishTime: 12: 10
+// https://leetcode.com/problems/search-in-rotated-sorted-array/
+
+/*
+这道题跟正常的二叉树搜索有点不同，因为进行了rotate，但是不管rotate多少遍，从中间分开一定有一段是inorder的，其实从某个点分开两段都是
+inorder的，然后我们就要判断target是在哪个区域，判断的时候根据排序好的那一段来看，如果在该段内就在这一部分进行下面的工作，如果不在这一
+段内，就在另一部分进行下面的工作。
+*/
+public class Solution {
+    public int search(int[] nums, int target) {
+        if (nums.length == 0) return -1;
+        int low = 0; 
+        int hi = nums.length - 1;
+        
+        while (low <= hi){
+            int mid = low + (hi - low) / 2;
+            if (nums[mid] == target) return mid;
+            if (nums[low] <= nums[mid]){
+                if (target >= nums[low] && target < nums[mid]) hi = mid - 1;
+                else low = mid + 1;
+            }
+            else if (nums[mid] <= nums[hi]){
+                if (target > nums[mid] && target <= nums[hi]) low = mid + 1;
+                else hi = mid - 1;
+            }
+        }
+        return -1;
+    }
+}
