@@ -1,0 +1,30 @@
+// startTime: 12: 19
+// finishTime: 12: 32
+// https://leetcode.com/problems/search-in-rotated-sorted-array-ii/
+
+/*
+这道题跟上一道题其实区别不大，就是多了重复问题，所以我再每一次循环的时候都进行消除重复操作，其他跟上道题一样。
+*/
+
+public class Solution {
+    public boolean search(int[] nums, int target) {
+        int low = 0; 
+        int hi = nums.length - 1;
+        while (low <= hi){
+            int mid = low + (hi - low) / 2;
+            if (nums[mid] == target) return true;
+            if (nums[low] == nums[hi]) low ++;
+            else if (nums[low] == nums[mid]) low++;
+            else if (nums[mid] == nums[hi]) hi--;
+            else if (nums[mid] < nums[hi]){
+                if (target > nums[mid] && target <= nums[hi]) low = mid + 1;
+                else hi = mid - 1;
+            }
+            else if (nums[low] < nums[mid]){
+                if (target >= nums[low] && target < nums[mid]) hi = mid - 1;
+                else low = mid + 1;
+            }
+        }
+        return false;
+    }
+}
