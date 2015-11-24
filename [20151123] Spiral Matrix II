@@ -1,0 +1,25 @@
+// startTimr: 16 : 07
+// finishTime: 16 : 20
+// https://leetcode.com/problems/spiral-matrix-ii/
+
+public class Solution {
+    public int[][] generateMatrix(int n) {
+        int cycle = n/ 2;
+        int[][] res = new int[n][n];
+        int count = 1;
+        
+        for (int i = 0; i < cycle; i++){
+            for (int j = i; j < n - i - 1; j++) res[i][j] = count ++;
+            for (int j = i; j < n - i - 1; j++) res[j][n - i - 1] = count ++;
+            for (int j = n - i - 1; j > i; j--) res[n - i - 1][j] = count ++;
+            for (int j = n - i - 1; j > i; j--) res[j][i] = count++;
+            System.out.println(count);
+        }
+        if (n % 2 == 1) res[n / 2][n / 2] = (int)Math.pow(n, 2);
+        
+        return res;
+    }
+}
+/*
+这道题跟上一道题差不多，不过要考虑的少了，因为m == n了，所以只要一步步的写出来就行了。
+*/
