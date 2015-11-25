@@ -1,0 +1,30 @@
+// startTime: 11: 55
+// finishTime: 12: 03
+// https://leetcode.com/problems/missing-number/
+
+// 这道题我就是用简单的和之间的减法。
+public class Solution {
+    public int missingNumber(int[] nums) {
+        int sum = 0;
+        double sum1 = ((0 + nums.length) / 2.0) * (nums.length + 1);
+        
+        for (int i = 0; i < nums.length; i++){
+            sum = sum + nums[i];
+        }
+        return (int)sum1 - sum;
+    }
+}
+
+/* 
+答案中用到的是bit操作，用了OXR，利用了a ^ b ^ b == a的方法，就是两个相同的数之间做异或就会被消除。最后剩下的就是单个的那个数，
+但是这里要注意的是，最开始我们设xor = 0了，所以在数组之外引入了一个0，所以最后我们要消除它，所以返回的是oxr ^ 0.
+*/
+
+public int missingNumber(int[] nums) {
+
+    int xor = 0, i = 0;
+    for (i = 0; i < nums.length; i++) {
+        xor = xor ^ i ^ nums[i];
+    }
+    return xor ^ i;
+}
