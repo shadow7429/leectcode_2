@@ -1,0 +1,24 @@
+// startTime: 24: 09
+// finishTime: 24: 46
+// https://leetcode.com/problems/rotate-image/
+
+/*
+这道题就找准变化规律就行，别把行列跟坐标混了！！！利用的可以in-place的方法是先把最左列保存起来，然后依次覆盖。
+并且这道题不用管最中间的点，因为是正方形，最后不剩或者剩一个，都不用理会。
+*/
+
+public class Solution {
+    public void rotate(int[][] matrix) {
+        if (matrix.length == 0 || matrix[0].length == 0) return;
+        int n = matrix.length;
+        for (int i = 0; i < n / 2; i ++){
+            ArrayList<Integer> l = new ArrayList<Integer>();
+            for (int j = n - 1 - i; j >= i; j--) l.add(matrix[j][i]);
+            for (int j = i; j <= n - 1 - i; j++) matrix[j][i] = matrix[n - 1 - i][j];
+            for (int j = n - 1 - i; j >= i; j--) matrix[n - 1 - i][n - 1 - j] = matrix[j][n - 1 - i];
+            for (int j = n - 1 - i; j >= i; j--) matrix[j][n - 1 - i] = matrix[i][j];
+            for (int j = i; j <= n - 1 - i; j++) matrix[i][j] = l.get(j - i);
+        }
+        return;
+    }
+}
