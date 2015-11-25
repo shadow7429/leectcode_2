@@ -1,0 +1,47 @@
+// 没做出来
+// https://leetcode.com/problems/product-of-array-except-self/
+
+// brute:
+/*
+现在习惯遇到问题先想能不能直接得到比较好的解决方案，若是不能就用brute方法解决，再考虑brute里面有哪些地方可以改进，
+这道题需要改进的就是做了很多重复工作，遍历一遍数组，但是在其中每次都要从头再遍历一遍，没有将已经计算过的利用起来
+所以想到了dp，但是output[i]和output[i - 1]也并不是完全可利用的，所以dp不适合。
+*/
+public class Solution {
+    public int[] productExceptSelf(int[] nums) {
+        int[] output = new int[nums.length];
+        for (int i = num; i < nums.length; i++){
+            output[i] = 1;
+            for (int j = 0; j < nums.length; j++){
+                output[i] = output[i] * nums[j];
+            }
+        }
+        return output;
+    }
+}
+
+// 聪明版
+/*
+其实这道题，在每一个对于每一个output可以分为是两部分的乘积，就是该index左边的各项乘积乘以右边的各部分的乘积，
+所以我们需要做的只是，先把每个index左边的部分的乘积存储起来，然后再用这些数与各个index右边部分的乘积相乘，就
+得到了想要的结果。具体代码里面，是利用两次循环完成，第一次循环从头开始让output数组每个位置存储该index之前的
+各个数的成绩，第二次循环从最后开始，在原来的output的基础上，每个index处再乘以从后往前的各个数的乘积。
+*/
+public class Solution {
+    public int[] productExceptSelf(int[] nums) {
+        int[] output = new int[nums.length];
+        int tmp = 1;
+        for (int i = 0; i < nums.length; i++){
+            output[i] = tmp;
+            tmp = tmp * nums[i];
+        }
+        tmp = 1;
+        for (int i = nums.length - 1; i >= 0; i--){
+            output[i] = output[i] * tmp;
+            tmp = tmp * nums[i];
+        }
+        return output;
+    }
+}
+
+
