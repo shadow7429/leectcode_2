@@ -1,0 +1,38 @@
+// startTime: 11: 23
+// finishTime: 11:52
+// https://leetcode.com/problems/next-permutation/
+
+public class Solution {
+    public void nextPermutation(int[] nums) {
+        if (nums.length <= 1) return;
+        int index = -1;
+        for (int i = 0; i < nums.length - 1; i++){
+            if (nums[i + 1] > nums[i]) index = i;
+        }
+        int i = index + 1;
+        int changeindex = 0;
+        while (index >= 0 && i < nums.length){
+            if (nums[i] > nums[index]) changeindex = i;
+            i++;
+        }
+        if (index >= 0){
+            int tmp = nums[index];
+            nums[index] = nums[changeindex];
+            nums[changeindex] = tmp;
+        } 
+        sort(index + 1, nums);
+        return;
+    }
+    public void sort(int startindex, int[] nums){
+        for (int i = startindex; i < nums.length; i++){
+            for (int j = i + 1; j < nums.length; j++){
+                if (nums[j] < nums[i]){
+                    int tmp = nums[j];
+                    nums[j] = nums[i];
+                    nums[i] = tmp;
+                }
+            }
+        }
+        return;
+    }
+}
