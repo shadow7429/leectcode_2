@@ -1,0 +1,26 @@
+// 没有完成时间复杂度的要求
+
+/*
+这道题很容易知道用动态规划法，并且利用行走的规律，可以知道到达某个点的前一个点的可能性最多有两种，用这个思路来解题。
+*/
+
+public class Solution {
+    public int minPathSum(int[][] grid) {
+        if(grid.length == 0 || grid[0].length == 0) return 0;
+        for (int i = 0; i < grid.length; i++){
+            for (int j = 0; j < grid[0].length; j++){
+                if (i == 0 && j == 0) continue;
+                else if (i == 0){
+                    grid[i][j] = grid[i][j] + grid[i][j - 1];
+                }
+                else if (j == 0){
+                    grid[i][j] = grid[i - 1][j] + grid[i][j];
+                }
+                else{
+                    grid[i][j] = Math.min(grid[i - 1][j], grid[i][j - 1]) + grid[i][j];
+                } 
+            }
+        }
+        return grid[grid.length - 1][grid[0].length - 1];
+    }
+}
