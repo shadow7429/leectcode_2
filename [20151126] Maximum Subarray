@@ -1,0 +1,28 @@
+// startTime: 16: 58
+// finishTime: 17: 19
+// https://leetcode.com/problems/maximum-subarray/
+
+
+/*
+这道题的思路就是在一个数组中，如果i位置之前的是比较小的，那么就完全可以把前面的舍去，从i开始，所以利用这个思想，我将数组中
+每个位置上的数字更新为到达这个数字的subarray的最大长度，所以如果到达一个index为i，那么我去检查nums[i] + nums[i - 1]是不是
+比nums[i]大，如果不是，则没有必要与前面的子串相连接，如果是，则连接，并把nums[i]的值更新为num[i] + nums[i - 1]。所以res
+只需要在没到达一个地方的时候就做一个取最大值操作，最后遍历完，res的结果就是整个过程的最大的subarray的和。
+遇到这种问题的时候，先从最笨的角度考虑，这道题我就想着，最笨的方法应该就是双层循环，每到一个点，就从0开始，求出到达该点的
+最大subarray和，那么出现的非常浪费时间的问题就是总是要反复的计算前面的subarray值，因此为了利用已经算好的值，并且这里面比较好
+的是需要连续，所以如果已经断开的就不用再考虑了，所以到达每个位置的时候，我并不用管前面是怎么连接的，nums[i - 1]中存的数字
+可能只是nums[i - 1]一个数，或者可能是一段数，都无所谓，我关心的只是到达了i的位置要如何连接，所以就得出了下面的方法。
+*/
+public class Solution {
+    public int maxSubArray(int[] nums) {
+        if (nums.length == 0) return 0;
+        int res = nums[0];
+        for (int i = 1; i < nums.length; i++){
+            if (nums[i] + nums[i - 1] > nums[i]){
+                nums[i] = nums[i - 1] + nums[i];
+            }
+            res = Math.max(res, nums[i]);
+        }
+        return res;
+    }
+}
