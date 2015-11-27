@@ -1,0 +1,60 @@
+// 没做出来，第一反应就是用hashmap，然后要求O(1) extra space。然后思路一直跳不出去。TAT
+// https://leetcode.com/problems/majority-element-ii/
+
+/*
+这道题需要注意的是more than是代表着 > 而不是大于等于，因此这个问题其实先从总共可能有几个解想一想，
+总共是n个，要求出出现次数大于 n / 3的元素，可以知道最多可能有两个，那么我们就找出出现次数最多的
+两个，然后判断他们出现次数是否大于n / 3。就可以了。
+注意，下面的解法里面，之所以每出现一个新的就在原来的c1 和 c2上各减去1，但是并没有记录下来n3，但是
+最后可以得到出现次数最多的俩，是因为，如果n3才是出现最多的当中的一个，那么就算只有n1, n2, n3三个数，
+我每次n3出现一次我就给那俩减去1，但是没有记录n3，但是n3因为比他们其中一个出现次数多，所以当其中一个
+的次数为0了的时候，n3一定还会再出现。
+*/
+public class Solution {
+    public List<Integer> majorityElement(int[] nums) {
+        List<Integer> res = new ArrayList<Integer>();
+        if (nums.length == 0) return res;
+        int n1 = 0;
+        int c1 = 0;
+        int n2 = 0;
+        int c2 = 0;
+        for (int i = 0; i < nums.length; i++){
+            int n3 = nums[i];
+            if (c1 > 0 && c2 > 0){
+                if (n3 == n1) c1++;
+                else if (n3 == n2) c2++;
+                else {
+                    c1--;
+                    c2--;
+                }
+            }
+            else if (c1 > 0){
+                if (n3 == n1) c1++;
+                else {
+                    n2 = n3;
+                    c2++;
+                }
+            }
+            else if (c2 > 0){
+                if (n3 == n2) c2++;
+                else {
+                    n1 = n3;
+                    c1++;
+                }
+            }
+            else {
+                n1 = n3;
+                c1++;
+            }
+        }
+        c1 = 0;
+        c2 = 0;
+       for (int i = 0; i < nums.length; i++){
+           if (nums[i] == n1) c1++;
+           else if (nums[i] == n2) c2++;
+       } 
+       if (c1 > nums.length / 3) res.add(n1);
+       if (c2 > nums.length / 3) res.add(n2);
+       return res;
+    }
+}
