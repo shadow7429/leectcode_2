@@ -1,0 +1,31 @@
+// startTime: 19: 40
+// finishTime: 19: 55
+// https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
+
+/*
+这道题就是我们首先考虑这个数组的可能形式，可能就是排序的，可能是从某处rotated的，那么如何判断呢。
+我们知道从某处rotate的数组从某点分成两段，两段都各是排序好的，但是第一段的最小值大于第二段的最大值，
+不管rotate几次都是如此，所以我们首先判断该数组是不是排序好的，如果是排序好的则直接返回第一个就好，
+若不是则取中间点继续分割。但是有点tricky的地方是弱势nums[mid] < nums[lo]的话就说明最小值存在在左侧，
+但是并不能hi = mid - 1，因为可能就在mid位置，也不能写成 hi = mid;这样可能进入死循环，所以就分情况。
+如果就在mid就直接返回，若是不在mid就hi = mid - 1。
+*/
+public class Solution {
+    public int findMin(int[] nums) {
+        if (nums.length == 0) return 0;
+        int lo = 0;
+        int hi = nums.length - 1;
+        int mid = 0;
+        
+        while (lo <= hi){
+            mid = lo + (hi - lo) / 2;
+            if (nums[lo] <= nums[hi]) return nums[lo];
+            else if (nums[mid] >= nums[lo]) lo = mid + 1;
+            else {
+                if (nums[mid - 1] < nums[mid]) hi = mid - 1;
+                else return nums[mid];
+            }
+        }
+        return nums[mid];
+    }
+}
