@@ -1,0 +1,24 @@
+// startTime: 12: 05
+// finishTime: 12: 15
+// https://leetcode.com/problems/longest-substring-without-repeating-characters/
+
+/*
+这道题其实就是简单的用了LinkedList的removeFirst()函数，题目的唯一的限制条件就是字母不能重复，所以我用removeFirst函数进行控制，
+每次想要放入新的字母的时候就检查当前list中是不是已经存在了这个字母，若是的话，因为不知道已经存在的字母在list的哪个位置，所以
+就循环直到将该存在的字母删除，然后放入新的这个字母，每次放入字母都要对res进行更新。
+*/
+public class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        int res = 0;
+        LinkedList<Character> l = new LinkedList<Character>();
+        
+        for (int i = 0; i < s.length(); i++){
+            while (l.contains(s.charAt(i))){
+                l.removeFirst();
+            }
+            l.add(s.charAt(i));
+            res = Math.max(res, l.size());
+        }
+        return res;
+    }
+}
