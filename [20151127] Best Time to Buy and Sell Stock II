@@ -1,0 +1,36 @@
+// startTime: 01: 17
+// finishTime: 01: 47
+// https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/
+
+/*
+这道题的思路也是比较简单，就把一个区域内的peakmin和紧邻的peakmax选作buy和sell的time，然后累加做和就好了。
+比较需要想清楚的地方是：对于从i到j，直接到达的路径长度肯定比中间出现上下起伏然后分段到达的路径长度小，
+跟这个类似的求profit的时候也是，只要是peakmin的时候买入，紧邻的peakmax售出，一直这样做，肯定赚的。
+*/
+public class Solution {
+    public int maxProfit(int[] prices) {
+        if (prices.length == 0) return 0;
+        int res = 0;
+        int buy = 0;
+        int sell = 0;
+        int i = 0;
+        while (i < prices.length - 1){
+            while (i < prices.length - 1 && prices[i + 1] < prices[i]){
+                i++;
+            }
+            buy = i;
+            sell = i;
+            
+            while (i < prices.length - 1 && prices[i + 1] > prices[i]){
+                i ++;
+            }
+            sell = i;
+            //System.out.println(buy + " " + sell);
+            res = res + prices[sell] - prices[buy];
+            i++;
+            sell = i;
+            buy = i;
+        }
+        return res;
+    }
+}
