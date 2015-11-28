@@ -1,0 +1,36 @@
+// startTime: 22: 16
+// finisTime: 22: 43
+// https://leetcode.com/problems/combination-sum/
+
+/*
+最开始的想法是因为每个数值可以出现很多次，所以每个recursive循环都从最开始开始，这样子就可能出现很多重复的工作，不符合时间上的要求，
+所以做出的改动是，最开始我就将这个数组进行了排序，然后递归调用的过程每一次从上一个迭代的index开始，这样减少了很多重复的工作。
+*/
+public class Solution {
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> res = new ArrayList<List<Integer>>();
+        if (candidates.length == 0) return res;
+        Arrays.sort(candidates);
+        helper(candidates, 0, target, 0, new ArrayList<Integer>(), res);
+        return res;
+    }
+    
+    public void helper(int[] candidates, int index, int target, int sum, List<Integer> current, List<List<Integer>> res){
+        if (sum == target){
+            Collections.sort(current);
+            if (!res.contains(current)) res.add(current);
+            return;
+        }
+        if (sum > target) return;
+        
+        for (int i = index; i < candidates.length; i++){
+            List<Integer> tmp = new ArrayList<Integer>();
+            tmp.addAll(current);
+            tmp.add(candidates[i]);
+            sum = sum + candidates[i];
+            helper(candidates, i, target, sum, tmp, res);
+            sum = sum - candidates[i];
+        }
+        return;
+    }
+}
