@@ -1,0 +1,38 @@
+// startTime: 10: 55
+// finishTime: 11: 16
+// https://leetcode.com/problems/3sum-closest/
+
+
+/*
+想了有一会儿怎么在这个的基础上优化，最后发现dis上只有这种。。。
+*/
+public class Solution {
+    public int threeSumClosest(int[] nums, int target) {
+        Arrays.sort(nums);
+        int dif = Integer.MAX_VALUE;
+        int sum = 0;
+        for (int i = 0; i < nums.length - 2; i++){
+            int lo = i + 1;
+            int hi = nums.length - 1;
+            int tmptarget = target - nums[i];
+            while (lo < hi){
+                if (Math.abs(nums[lo] + nums[hi] - tmptarget) < dif){
+                        dif = Math.abs(nums[lo] + nums[hi] - tmptarget);
+                        sum = nums[i] + nums[lo] + nums[hi];
+                }
+                
+                if (nums[lo] + nums[hi] == tmptarget){
+                    return target;
+                }
+                else if (nums[lo] + nums[hi] > tmptarget){
+                    hi--;
+                }
+                else if (nums[lo] + nums[hi] < tmptarget){
+                    lo ++;
+                }
+                
+            }
+        }
+        return sum;
+    }
+}
