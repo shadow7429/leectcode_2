@@ -3,7 +3,10 @@
 // https://leetcode.com/problems/4sum/
 
 /*
-这道题就是单层循环的内部进行一个3sum的操作。
+这道题就是单层循环的内部进行一个3sum的操作。用双指针的方法其实时间复杂度相当于O(n^3)。
+我们可以用hashmap来进行优化，最开始利用一个双层循环，将pair的和存储起来，就是数组中每两个数的和，用和作为key，value是一个
+list<List<Integer>>，是每个符合这个和的pair，然后下面用一个双层循环，对于每一个seekvalue在hashmap中进行查找。
+其实用hashmap的目的主要是节约寻找目标值的时间。在2sum中，用nums[i]做key，用index做value。
 */
 public class Solution {
     public List<List<Integer>> fourSum(int[] nums, int target) {
