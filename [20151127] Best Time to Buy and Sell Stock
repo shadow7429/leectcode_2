@@ -1,0 +1,33 @@
+// startTime: 00: 26
+// finishTime: 00: 58
+// https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
+
+/*
+其实这道题的想法很简单，最开始想的肯定是brute方法，就是两层循环。但是可想而知很浪费时间。所以思考怎样优化。
+其实本题只需要一遍循环即可，我只需要对每一次合理的buy和sell产生的profit进行比较，然后得出res。怎样获得合理的
+buy和sell的index，就是在遍历的过程中，如果遇到比当前buy的耗费小的就说明可以开始新的旅途了，就双双将buy和sell的
+index更新成这个i，若是只是遇到sell增大的位置，就将sell位置增大，增大的过程中更新res。
+开始新旅途的道题如下所示：
+a1, a2, a3, a4, a5, a6, a7, a8 假设原本buy==a2，sell==a3，那么这个时候 在a5处，a5 < a2，可以知道在其后遇到的每一个
+数，如果比a2大，那么一定比a5大，并且获得的profit一定更高，更何况前面的profit已经记录下来了，所以不用管了，只管更新
+现在的情况即可。
+*/
+public class Solution {
+    public int maxProfit(int[] prices) {
+        if (prices.length == 0) return 0;
+        int res = 0;
+        int buy = 0;
+        int sell = 0;
+        for (int i = 0; i < prices.length; i++){
+            if (prices[i] > prices[sell]){
+                sell = i;
+                res = Math.max(prices[sell] - prices[buy], res);
+            }
+            else if (prices[i] < prices[buy]){
+                buy = i;
+                sell = i;
+            }
+        }
+        return res;
+    }
+}
