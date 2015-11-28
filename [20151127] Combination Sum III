@@ -1,0 +1,36 @@
+// startTime: 22: 57
+// finishTime: 24: 14
+// https://leetcode.com/problems/combination-sum-iii/
+
+/*
+其实这道题跟上面那个差不多，就多了一个限制条件，但是出现了一个问题，一直没看出来：(1) 和 (2) 这两个if条件判断，刚开始写的时候
+颠倒了顺序，所以少输出了一些最后一个数字为9的序列，这是因为当最后一个为9的序列的sum满足target的时候，会进入下一个循环，但是因为
+先判断了start是不是大于9，所以直接就return掉了，并没有将前面的满足的情况保留下来。
+*/
+
+public class Solution {
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        List<List<Integer>> res = new ArrayList<List<Integer>>();
+        if (k == 0 || n == 0 || k > n) return res;
+        helper(k, 1, 0, n, new ArrayList<Integer>(), res);
+        return res;
+    }
+    
+    public void helper(int k, int start, int sum, int target, List<Integer> current, List<List<Integer>> res){
+        if (current.size() == k && sum == target){                //-----------------------(1)
+            res.add(current);
+            return;
+        }
+        else if (current.size() > k || start > 9) return;         //-----------------------(2)
+        else if (current.size() == k && sum < target) return;
+        else if(sum >= target) return;
+        
+        for (int i = start; i <= 9; i++){
+            List<Integer> tmp = new ArrayList<Integer>();
+            tmp.addAll(current);
+            tmp.add(i);
+            helper(k, i + 1, sum + i, target, tmp, res);
+        }
+        return;
+    }
+}
