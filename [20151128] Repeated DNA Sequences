@@ -1,0 +1,22 @@
+// startTime: 11: 45
+// finishTime: 11: 57
+// https://leetcode.com/problems/repeated-dna-sequences/
+
+
+/*
+利用一个set来记录已经出现过的string。这道题里有一个模糊点，就是两个string能不能出现index上的覆盖，面试的时候这个问题要问清楚。
+本题的解决方法默认可以出现index上的覆盖了，如果不可以的话就要进行双层的循环了。外层循环i从0开始i++，内层循环j从i + 10开始j++。
+*/
+public class Solution {
+    public List<String> findRepeatedDnaSequences(String s) {
+        List<String> l = new ArrayList<String>();
+        Set<String> set = new HashSet<String>();
+        for (int i = 0; i < s.length() - 9; i++){
+            String tmp = s.substring(i, i + 10);
+            if (!set.add(tmp)){
+                if (!l.contains(tmp)) l.add(tmp);
+            }
+        }
+        return l;
+    }
+}
