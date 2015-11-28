@@ -1,0 +1,27 @@
+// startTime: 11: 27
+// finishTime: 11: 36
+// https://leetcode.com/problems/two-sum/
+
+
+/*
+别忘了要判断if (hm.get(target - nums[i]) == (i + 1))，若是输入[3,2,4]，target=6要是不进行判断的话会返回[1,1]。
+*/
+public class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        int[] res = new int[2];
+        if (nums.length < 2) return res;
+        HashMap<Integer, Integer> hm = new HashMap<Integer, Integer>();
+        for (int i = 0; i < nums.length; i++){
+            hm.put(nums[i], i + 1);
+        } 
+        for (int i = 0; i < nums.length; i++){
+            if (hm.containsKey(target - nums[i])) {
+                if (hm.get(target - nums[i]) == (i + 1)) continue;
+                res[0] = i + 1;
+                res[1] = hm.get(target - nums[i]);
+                return res;
+            }
+        }
+        return res;
+    }
+}
