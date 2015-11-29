@@ -1,0 +1,40 @@
+// startTime: 10: 13
+// finishTime: 10: 38
+// https://leetcode.com/problems/binary-tree-inorder-traversal/
+
+/*
+这道题如果递归写就很好写，但是要求不让用递归，递归的迭代写法就是用stack。然后想着是如果中序遍历的话，
+就要先走到最左边然后中间然后右边，所以如果一个节点处有左节点就把左节点压入，如果没有就pop出来当前节点
+然后如果它有右节点就把右节点压入。但是这里面出现了一个问题，就是刚才已经进行扩展了的节点，当它的孩子都
+pop出去了时候又peek到它，这个时候还会检测它是否有左子树等等，所以我们需要将那些已经扩展过得存储起来，
+当再走到他们的时候就不进行左子树的扩展了。所以这个时候利用了hashset，hashset是一个很好的检查重复的数据
+结构。
+*/
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> l = new ArrayList<Integer>();
+        if (root == null) return l;
+        Stack<TreeNode> s = new Stack<TreeNode>();
+        s.push(root);
+        HashSet<TreeNode> set = new HashSet<TreeNode>();
+        while (! s.isEmpty()){
+            TreeNode tmp = s.peek();
+            if (set.add(tmp) && tmp.left != null) s.push(tmp.left);
+            else {
+                tmp = s.pop();
+                l.add(tmp.val);
+                if (tmp.right != null) s.push(tmp.right);
+            }
+        }
+        return l;
+    }
+}
