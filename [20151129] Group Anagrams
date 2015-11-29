@@ -1,0 +1,35 @@
+// startTime: 10: 46
+// finishTime: 11: 04
+// https://leetcode.com/problems/anagrams/
+
+/*
+这道题的思路主要是，遍历一遍strs数组，然后对每一个字符串进行排序了之后看这个序列是否出现过，如果出现过
+就将它添加到已经存在的那个list中，如果没出现过就记录并添加。这里检测一个经排序的string是否出现过的方法
+是用hashmap，hashmap的key是排序过的string，value是该string是list<List<String>>中那个list的统一形式。
+出现的错误：在做题的时候一直用c.toString(); 试图将字符型数组转化为字符串，实际的转化方式应为下面代码注释(1)。
+*/
+public class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        List<List<String>> l = new ArrayList<List<String>>();
+        if (strs.length == 0) return l;
+        
+        HashMap<String, Integer> hm = new HashMap<String, Integer>();
+        for (String s : strs){
+            char[] c = s.toCharArray();
+            Arrays.sort(c);
+            String tmp = new String(c);                   // ----------------------------------(1)
+            if (hm.containsKey(tmp)){
+                List<String> ltmp = l.get(hm.get(tmp));
+                ltmp.add(s);
+                Collections.sort(ltmp);
+            }
+            else {
+                List<String> ltmp = new ArrayList<String>();
+                ltmp.add(s);
+                l.add(ltmp);
+                hm.put(tmp, l.size() - 1);
+            }
+        }
+        return l;
+    }
+}
