@@ -1,30 +1,41 @@
 // over an hour.
 // https://leetcode.com/problems/fraction-to-recurring-decimal/
 
+/*
+这道题要注意的几个地方：
+(2) 对于要取绝对值的时候，为避免变正之后超出integer的边界，应该用long来存储；
+(1) 注意被除数是0的时候，sign应该为""；
+这道题的主要思路就是，先把整数部分和小数点放入string中（如果不是整除的情况下），然后因为之后的被除数就是上一步的余数，
+因此当出现重复的余数了的时候说明出现了循环，因此我们就用一个HashMap记录下来每一个余数导致的小数部分的第几位，然后
+当出现了一个重复的余数的时候，我们只需要得到hashmap中对应的index值，在该位置上插入一个左括号，在最末端插入右括号
+最后将这部分与前面整数部分拼接，即可得到结果。如果不是出现了循环而是除尽了，那么最后余数会变为0，直接将结果拼接即可。
+*/
 public class Solution {
     public String fractionToDecimal(int numerator, int denominator) {
-        String sign = numerator * denominator >= 0 ? "" : "-";
-        numerator = Math.abs(numerator);
-        denominator = Math.abs(denominator);
-        
-        if (numerator % denominator == 0) return sign + numerator / denominator;
-        String res = sign + numerator / denominator + ".";
+        String sign = numerator > 0 ^ denominator >= 0 ? "-" : "";
+        if (numerator == 0) sign = "";                        //------------------------(2)
+        long n = numerator;                                   //------------------------(1)
+        long d = denominator;
+        n = Math.abs(n);
+        d = Math.abs(d);
+        if (n % d == 0) return sign + n / d;
+        String res = sign + n / d + ".";
 
         ArrayList<String> l = new ArrayList<String>();
-        HashMap<Integer, Integer> hm = new HashMap<Integer, Integer>();
-        numerator = numerator % denominator;
+        HashMap<Long, Integer> hm = new HashMap<Long, Integer>();
+        n = n % d;
         
-        while (! hm.containsKey(numerator) && numerator != 0){
-            while (numerator < denominator){
-                hm.put(numerator % denominator, l.size());
-                numerator = numerator * 10;
-                if (numerator < denominator) l.add("0");
+        while (! hm.containsKey(n) && n != 0){
+            while (n < d){
+                hm.put(n % d, l.size());
+                n = n * 10;
+                if (n < d) l.add("0");
             }
-            l.add(numerator / denominator + "");
-            numerator = numerator % denominator;
+            l.add(n / d + "");
+            n = n % d;
         }
-        if (numerator != 0){
-            l.add(hm.get(numerator), "(");
+        if (n != 0){
+            l.add(hm.get(n), "(");
             l.add(")");
         }
         for (String s : l) res = res + s;
