@@ -1,0 +1,34 @@
+// startTime: 11: 04
+// finishTime: 11: 52
+// https://leetcode.com/problems/swap-nodes-in-pairs/
+
+/*
+要多做一些链表的题，很不熟悉，很简单的题弄了这么久！！！！
+*/
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public ListNode swapPairs(ListNode head) {
+        if (head == null) return null;
+        ListNode pre = new ListNode(0);
+        pre.next = head;
+        ListNode res = pre;
+        
+        while (head != null && head.next != null){
+            ListNode tmp = head.next;
+            pre.next = tmp;
+            head.next = tmp.next;
+            tmp.next = head;
+            head = head.next;
+            pre = pre.next.next;
+        }
+        return res.next;
+    }
+}
