@@ -1,0 +1,33 @@
+// over an hour.
+// https://leetcode.com/problems/fraction-to-recurring-decimal/
+
+public class Solution {
+    public String fractionToDecimal(int numerator, int denominator) {
+        String sign = numerator * denominator >= 0 ? "" : "-";
+        numerator = Math.abs(numerator);
+        denominator = Math.abs(denominator);
+        
+        if (numerator % denominator == 0) return sign + numerator / denominator;
+        String res = sign + numerator / denominator + ".";
+
+        ArrayList<String> l = new ArrayList<String>();
+        HashMap<Integer, Integer> hm = new HashMap<Integer, Integer>();
+        numerator = numerator % denominator;
+        
+        while (! hm.containsKey(numerator) && numerator != 0){
+            while (numerator < denominator){
+                hm.put(numerator % denominator, l.size());
+                numerator = numerator * 10;
+                if (numerator < denominator) l.add("0");
+            }
+            l.add(numerator / denominator + "");
+            numerator = numerator % denominator;
+        }
+        if (numerator != 0){
+            l.add(hm.get(numerator), "(");
+            l.add(")");
+        }
+        for (String s : l) res = res + s;
+        return res;
+    }
+}
