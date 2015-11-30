@@ -1,0 +1,63 @@
+// startTime: 11: 19
+// finishTime: 11: 59
+// https://leetcode.com/problems/reorder-list/
+
+// 第一个brute方法，超时，但是结果是对的。
+public class Solution {
+    public void reorderList(ListNode head) {
+        if (head == null || head.next == null) return;
+        ListNode slow = head;
+        ListNode pre = head;
+        while (pre != null && pre.next != null){
+            slow = slow.next;
+            pre = pre.next.next;
+        }
+        pre = head;
+        ListNode post = slow;
+        ListNode postpre = slow;
+        while (slow.next != null){
+            while (post.next != null){
+                postpre = post;
+                post = post.next;
+            }
+            postpre.next = null;
+            post.next = pre.next;
+            pre.next = post;
+            pre = pre.next.next;
+        }
+        return;
+    }
+}
+
+/*
+因为每次都从中间位置往后遍历找最后一个位置太费时间，本来想着用递归，后来想下决定用Linkedlist，这样利用
+Linkedlist的removeFirst()和removeLast()函数很容易依次获得一个list的第一个和最后一个节点，这里不要忘了
+将一个节点的next节点移动位置的时候，要将这个节点的next赋为null。
+*/
+public class Solution {
+    public void reorderList(ListNode head) {
+        if (head == null || head.next == null) return;
+        LinkedList<ListNode> l = new LinkedList<ListNode>();
+        ListNode traverse = head;
+        while (traverse != null){
+            l.add(traverse);
+            traverse = traverse.next;
+        }
+        ListNode pre = new ListNode(0);
+        while (l.size() > 0){
+            ListNode p = l.removeFirst();
+            pre.next = p;
+            pre = pre.next;
+            pre.next = null;
+            if (l.size() > 0){
+                ListNode q = l.removeLast();
+                if (l.size() > 0){
+                    l.get(l.size() - 1).next = null;
+                }
+                pre.next = q;
+                pre = pre.next;
+            }
+        }
+        return;
+    }
+}
