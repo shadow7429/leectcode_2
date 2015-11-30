@@ -1,0 +1,55 @@
+// startTime: 10: 37
+// finishTime: 11: 10
+// https://leetcode.com/problems/reverse-linked-list-ii/
+
+
+/*
+方法就是先找到m前一个位置，和n后一个位置，然后逐步的把m ~ n这一段的node从后到前的与前面那一段连接，最后得到结果。
+需要注意的地方是：
+1. pre和post指针开始的位置不应该是head，而是head的前面，因为需要新new一个节点，将该节点的next设为head，这是因为
+   m可能等于1；
+2. 要注意返回，最开始没想好，然后默认了返回的是head，这对于m开始位置不在1是适用的，因为head没有改变，但是若从1位置
+   就开始reverse，那么返回head就会丢失一部分节点。
+3. 在while循环里总是忘记将控制变量的值改变。
+*/
+
+
+public class Solution {
+    public ListNode reverseBetween(ListNode head, int m, int n) {
+        if(head == null) return null;
+        int i = 1;
+        ListNode pre = new ListNode(0);                     // ----------------(1)
+        pre.next = head;                    
+        ListNode res = pre;                                 // ----------------(2)
+        ListNode post = pre;                                
+        while (i < m){
+            pre = pre.next;
+            post = post.next;
+            i++;                                            // ----------------(3)
+        }
+        while (i <= n) {
+            post = post.next;
+            i++;
+        }
+        if (post.next == null ) post = null;
+        else {
+            ListNode tmp = post.next;
+            post.next = null;
+            post = tmp;
+        }
+        ListNode current = pre;
+        ListNode currentpre = pre;
+        while (pre.next.next != null){
+            while (current.next != null){
+                currentpre = current;
+                current = current.next;
+            }
+            currentpre.next = null;
+            current.next = pre.next;
+            pre.next = current;
+            pre = pre.next;
+        }
+        pre.next.next = post;
+        return res.next;
+    }
+}
