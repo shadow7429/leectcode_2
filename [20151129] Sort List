@@ -1,0 +1,43 @@
+// 非常不熟练，这几天要好好地把list疏通一下。
+/*
+这道题的思路大概就是因为list比较方便的操作就是从head到tail单方向的走，所以我们所要考虑的排序算法应该
+最好也是从前到后单方向的，快速排序右半段是从后往前所以不选择，而要求了时间复杂度，可以知道冒泡排序
+也不符合，所以我们选择归并排序。
+归并排序的思想是，将一个数组以每次为前一次size的一半进行划分，然后从最后的开始两组两组进行排序，例如：
+[a1, a2, a3, a4, a5, a6, a7, a8]八个数字，就会被分为[a1, a2, a3, a4], [a5, a6], [a7], [a8]四组，然后
+从最后两组开始比较，边比较边归并，然后将[a5, a6]这一组进行内部排序，排序完在与刚才得到的归并后的集合
+进行归并排序，以此类推。
+*/
+
+public class Solution {
+    public ListNode sortList(ListNode head) {
+        if (head == null || head.next == null) return head;
+        ListNode f = head.next.next;
+        ListNode p = head;
+        while (f != null && f.next != null){
+            p = p.next;
+            f = f.next.next;
+        }
+        ListNode h2 = sortList(p.next);
+        p.next = null;
+        return merge(sortList(head), h2);
+    }
+    public ListNode merge(ListNode h1, ListNode h2){
+        ListNode hn = new ListNode(Integer.MIN_VALUE);
+        ListNode c = hn;
+        while (h1 != null && h2 != null){
+            if (h1.val < h2.val){
+                c.next = h1;
+                h1 = h1.next;
+            }
+            else {
+                c.next = h2;
+                h2 = h2.next;
+            }
+            c = c.next;
+        }
+        if (h1 != null) c.next = h1;
+        if (h2 != null) c.next = h2;
+        return hn.next;
+    }
+}
