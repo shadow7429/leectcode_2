@@ -1,0 +1,33 @@
+// startTime: 23: 10
+// finishTime: 23: 28
+// https://leetcode.com/problems/remove-duplicates-from-sorted-list-ii/
+
+/*
+链表问题大多数都是前后指针然后进行对next的操作，这两天碰到的题都是只要认真写好就差不多了，面试的时候不要慌。
+*/
+public class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+        if (head == null) return null;
+        ListNode pre = new ListNode(Integer.MAX_VALUE);
+        pre.next = head;
+        ListNode current = pre.next;
+        ListNode res = pre;
+        while (current != null && current.next != null){
+            if (current.next.val != current.val){
+                current = current.next;
+                pre = pre.next;
+            }
+            else {
+                while (current.next != null && current.next.val == current.val) current = current.next;
+                pre.next = null;
+                if (current.next != null){
+                    ListNode next = current.next;
+                    current.next = null;
+                    pre.next = next;
+                    current = next;
+                }
+            }
+        }
+        return res.next;
+    }
+}
