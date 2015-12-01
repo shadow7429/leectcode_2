@@ -1,0 +1,34 @@
+// startTime: 00: 26
+// finishTime: 00: 39
+// https://leetcode.com/problems/linked-list-cycle-ii/
+
+/*
+这道题借用了前面那道题的思路，并且利用了到遇到为止fast走的路程为slow走的路程的两倍，推导距离公式，
+直路长 + 圈内fast = 2 * (直路长 + 圈内slow) 因为直路长都是一样的，并且圈内fast和slow走的不足一圈
+的长度是一样的，因为相遇了嘛，所以 整圈的n倍 - fast和slow走的不足一圈的长度 = 直路长，而用一圈减去
+走的不足一圈的长度就得到了相遇点继续向前走走到loop开始的地方的距离, 这个距离加上n倍的loop长就等于
+直路长。而loop长不重要，再用head从开始的地方走，slow从slow与fast相遇的地方走，等slow和head相遇的时候
+就是loop开始的地方。
+*/
+public class Solution {
+    public ListNode detectCycle(ListNode head) {
+       if (head == null) return null;
+       ListNode fast = head;
+       ListNode slow = head;
+       boolean loop = false;
+       while (fast != null && fast.next != null){
+            fast = fast.next.next;
+            slow = slow.next;
+            if (fast == slow) {
+                loop = true;
+                break;
+            }
+       }
+        if (loop == false) return null;
+        while (head != slow){
+            head = head.next;
+            slow = slow.next;
+        }
+        return head;
+    }
+}
