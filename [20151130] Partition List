@@ -1,0 +1,39 @@
+// startTime: 23: 36
+// finishTime: 00: 04
+// https://leetcode.com/problems/partition-list/
+
+
+/*
+做题的时候要注意想各种情况的测例来检测自己的程序，不能想当然。
+*/
+public class Solution {
+    public ListNode partition(ListNode head, int x) {
+        if (head == null) return null;
+        
+        ListNode s = new ListNode(x - 1);
+        s.next = head;
+        ListNode res = s;
+        ListNode pre = s;
+        ListNode c = pre.next;
+        while (c != null && c.next != null){
+            if (c.val < x && s.next != c){
+                pre.next = c.next;
+                c.next = s.next;
+                s.next = c;
+                s = s.next;
+                c = pre.next;
+            }
+            else {
+                if (c.val < x) s = s.next;
+                c = c.next;
+                pre = pre.next;
+            }
+        }
+        if (c != null && c.val < x && s.next != c){
+            pre.next = null;
+            c.next = s.next;
+            s.next = c;
+        }
+        return res.next;
+    }
+}
