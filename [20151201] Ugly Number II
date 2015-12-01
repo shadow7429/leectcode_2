@@ -13,6 +13,9 @@
 只出现一次，就是不管是a1 * 2 和a2 * 3这两个数可能相同，但是只能出现一次，所以如果这两个数都等于我们当前
 添加进来的数字的话，就将index2和index3都向后移动一位。最后得到的数组的最后一位即为我们要求的数字。
 是DP问题。
+做题的时候出现的小bug是index只是index而不是对应array里的数字，当时计算
+int currentval = Math.min(Math.min(res[index2] * 2, res[index3] * 3), res[index5] * 5);这个值的时候一直写成
+int currentval = Math.min(Math.min(index2 * 2, index3 * 3), index5 * 5);来着。粗心！！！！！！！！！！！！
 */
 public class Solution {
     public int nthUglyNumber(int n) {
