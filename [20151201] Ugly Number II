@@ -1,0 +1,37 @@
+// startTime: 11: 32
+// finishTime: 11: 52
+// https://leetcode.com/problems/ugly-number-ii/
+
+
+/*
+其实这道题因为uglynumber的定义是因子只有2，3，5.所以要保证一个数是uglynumber，把它拆分下去，只剩下
+2，3，5的乘积，所以从前到后得到uglynumber就是在前面uglynumber的基础上乘以2，3，5.但是因为要排序，
+如果不管大小顺序就从头到尾将各个数字乘以2，3，5然后再统一排序就会浪费很长时间，而且也不一定可以得到
+要求的第n位数字，因为后面的数字乘以2可能小于前面的数字乘以5. 所以这道题采用的思路是，我用三个index
+记录下下一个可以乘以2，3，5的数字的位置，然后将这个三个数字分别乘以对应的2，3，5，看哪个值比较小就
+将哪个值添加到数组中，这样就保证了顺序。并且得到了这个值之后去检查，哪个符合这个值，因为同一个uglynumber
+只出现一次，就是不管是a1 * 2 和a2 * 3这两个数可能相同，但是只能出现一次，所以如果这两个数都等于我们当前
+添加进来的数字的话，就将index2和index3都向后移动一位。最后得到的数组的最后一位即为我们要求的数字。
+是DP问题。
+*/
+public class Solution {
+    public int nthUglyNumber(int n) {
+        if (n == 0) return 0;
+        int[] res = new int[n];
+        res[0] = 1;
+        int i = 1;
+        int index2 = 0;
+        int index3 = 0;
+        int index5 = 0;
+        
+        while (i < n){
+            int currentval = Math.min(Math.min(res[index2] * 2, res[index3] * 3), res[index5] * 5);
+            res[i] = currentval;
+            if (currentval == res[index2] * 2) index2++;
+            if (currentval == res[index3] * 3) index3++;
+            if (currentval == res[index5] * 5) index5++;
+            i++;
+        }
+        return res[n - 1];
+    }
+}
