@@ -1,0 +1,39 @@
+// startTime: 10: 28
+// finishTime: 10: 45
+// https://leetcode.com/problems/insertion-sort-list/
+
+/*
+就是将正常的插入排序应用到list中就好啦。
+*/
+public class Solution {
+    public ListNode insertionSortList(ListNode head) {
+        if (head == null) return null;
+        ListNode p = new ListNode(Integer.MIN_VALUE);
+        p.next = head;
+        ListNode cp = p;
+        ListNode c = cp.next;
+        ListNode res = p;
+        while (c != null){
+            if (c.val >= cp.val){
+                c = c.next;
+                cp = cp.next;
+            }
+            else{
+                while (p.next != c){
+                    if (p.next.val > c.val && p.val <= c.val){
+                        cp.next = c.next;
+                        c.next = p.next;
+                        p.next = c;
+                        c = cp.next;
+                        break;
+                    }
+                    else {
+                        p = p.next;
+                    }
+                }
+            }
+            p = res;
+        }
+        return res.next;
+    }
+}
