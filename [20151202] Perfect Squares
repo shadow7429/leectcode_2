@@ -1,0 +1,45 @@
+// startTime: 11: 34
+// finishTime: 11: 57
+// https://leetcode.com/problems/perfect-squares/
+
+/*
+偷看了tag，上面有动态规划才想到的。其实就是用一个数组存储下来前面的每个数最少的perfect square numbers数量。
+然后对前面的数组从两边进行加和比较。例如：
+n = 8的情况： 
+helper[1] = 1;
+helper[2] = 2;
+helper[3] = 3;
+helper[4] = 1;
+helper[5] = 2;
+helper[6] = 3;
+helper[7] = 4;
+那么到了helper[8], 我们思考一下8可以怎么得来，首先8不是完全平方数，所以不能是1，那么就是几个数的加和，然后
+利用前面的结果，8可以是1 + 7, 2 + 6, 3 + 5, 4 + 4.这样得来，所以计算所有情况的最小解存储在helper[8]中，用来
+后面的利用。
+写代码的时候，犹豫了一下，想着8也可以是几个数（大于2）的和呀，为什么这里只算两个数，后来想明白了，因为其实
+我用1 + 7来得到8，但其实组成7的情况已经在之前讨论过了，所以不用再细分。其实动态规划问题就是这样，如果不用
+动态规划，那么对于每一步都要考虑所有的情况，但是动态规划解决，就可以直接利用前面已经得到的结果。
+*/
+public class Solution {
+    public int numSquares(int n) {
+        int[] helper = new int[n + 1];
+        helper[0] = 1;
+        helper[1] = 1;
+        for (int i = 2; i <= n; i++){
+            if ((int)Math.sqrt(i) * (int)Math.sqrt(i) == i){
+                helper[i] = 1;
+                continue;
+            }
+            int sum = Integer.MAX_VALUE;
+            int lo = 1;
+            int hi = i - 1;
+            while (lo <= hi){
+                sum = Math.min(sum, helper[lo] + helper[hi]);
+                lo ++;
+                hi--;
+            }
+            helper[i] = sum;
+        }
+        return helper[n];
+    }
+}
