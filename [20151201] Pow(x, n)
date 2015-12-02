@@ -1,0 +1,26 @@
+// startTime: 11: 37
+// finishTime: 00: 02
+// https://leetcode.com/problems/powx-n/
+
+public class Solution {
+    public double myPow(double x, int n) {
+        double res = 1;
+        boolean reverse = n > 0 ? false : true;
+        n = Math.abs(n);
+        int xZero = x > 0 || n % 2 == 0? 1 : -1;
+        x = Math.abs(x);
+        res = helper(x, n);
+        res = xZero * res;
+        res = reverse == true ? 1 / res : res;
+        return res;
+    }
+    public double helper(double x, int n){
+        double res = 1;
+        for (int i = 1; i <= n; i++){
+            double tmp = res;
+            res = res * x;
+            if (tmp == res) return res;
+        }
+        return res;
+    }
+}
