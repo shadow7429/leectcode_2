@@ -1,0 +1,25 @@
+// 这道题没做上，当输入的数字比较大的时候得不到正确结果。下面解释：
+
+/*
+这道题就是个简单的二叉搜索，因为对于一个正整数来说一定存在它的square，注意这里的square不是严格意义上的，一些非
+完全平方数也有square，然后对于一个x我们只要找到一个i使得，i * i <= x 并且(i + 1) * (i + 1) > x即可。因为就是
+找这样一个数。但是这里有个需要注意的地方，也是我犯的错误，就是应该用 mid > x / mid 来进行判断，而不是用
+mid * mid > x因为mid * mid可能会超出integer的边界。并且对于一个会有答案的问题，要学会用while(true)来进行循环，
+否则如果用一个表达式，那么最后需要另加一个return，但是是没有意义的。
+*/
+public class Solution {
+    public int mySqrt(int x) {
+        if (x == 0) return 0;
+        if (x == 1) return 1;
+        int low = 1;
+        int high = Integer.MAX_VALUE;
+        while (true){
+            int mid = low + (high - low) / 2;
+            if (mid > x / mid) high = mid - 1;
+            else {
+                if (mid + 1 > x / (mid + 1)) return mid;
+                else low = mid + 1;
+            }
+        }
+    }
+}
