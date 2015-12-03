@@ -1,0 +1,51 @@
+// 用了很久，因为走了弯路。
+// https://leetcode.com/problems/multiply-strings/
+
+
+/*
+其实这道题思路并不难，只要考虑清楚问题。刚开始走的弯路就是想着一边乘一边加一边计算carry，这样子会比较麻烦，
+而且很容易出错，后面干脆只是不管三七二十一加到list的对应位置，到最后再一次进行%10等运算，然后这里面要考虑
+的特殊情况是有一个数字为0的话，那么整体为0，这中要进行判断。
+*/
+public class Solution {
+    public String multiply(String num1, String num2) {
+        String n1 = num1.length() > num2.length() ? num1 : num2; 
+        String n2 = n1.equals(num1) ? num2 : num1;
+        int len1 = n1.length();
+        int len2 = n2.length();
+        List<Integer> l = new ArrayList<Integer>();
+        for (int i = len2 - 1; i >= 0; i--){
+            int startPos = l.size() - (len2 - i);
+            for (int j = len1 - 1; j >= 0; j--){
+                int setPos = startPos - (len1 - j - 1);
+                int tmp = (n2.charAt(i) - '0') * (n1.charAt(j) - '0');
+                if (setPos < 0) {
+                    l.add(0, tmp);
+                }
+                else{
+                    l.set(setPos, tmp + l.get(setPos));
+                } 
+                
+            }
+        }
+        int carry = 0;
+        for (int i = l.size() - 1; i >= 0; i --){
+            int tmp = l.get(i) + carry;
+            carry = tmp / 10;
+            l.set(i, tmp % 10);
+        }
+
+        while (carry > 0){
+            l.add(0, carry % 10);
+            carry = carry / 10;
+        }
+
+        String res = "";
+        for (int i : l) {
+            if (i == 0 && res.equals("")) continue;
+            res = res + i;
+        }
+        if (res.length() == 0) res = res + "0";
+        return res;
+    }
+}
