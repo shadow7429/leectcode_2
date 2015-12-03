@@ -1,0 +1,52 @@
+// startTime: 22: 53
+// finishTime: 23: 57
+// https://leetcode.com/problems/integer-to-english-words/
+
+//今天脑子太迷糊！！！！！！做了这么久！
+public class Solution {
+    String[] morethan1000 = {"", "Thousand", "Million", "Billion"};
+    String[] Ties = {"", "Ten", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
+    String[] Tens = {"Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"};
+    String[] Single = {"", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"};
+    public String numberToWords(int num) {
+        if (num == 0) return "Zero";
+        int i = 0;
+        String res = "";
+        while (num > 0){
+            int tmp = num % 1000;
+            num = num / 1000;
+            if (tmp > 0) {
+                res = helper(tmp) + morethan1000[i++]+ " " + res;
+            }
+            else i++;
+            if (num > 0 && num < 1000){
+                res = helper(num) + morethan1000[i++] + " " + res; 
+                num = 0;
+            }
+        }
+        res = res.trim();
+        return res;
+    }
+    public String helper(int num){
+        if (num == 0) return "";
+        String res = "";
+        // 百位
+        int tmp = num / 100;
+        num = num % 100;
+        if (tmp > 0) res = res + Single[tmp] + " " + "Hundred ";
+        // 十位
+        tmp = num / 10;
+        num = num % 10;
+        if (tmp > 0 && tmp < 2){
+            res = res + Tens[num] + " ";
+            return res;
+        }
+        else if (tmp >= 2){
+            res = res + Ties[tmp] + " ";
+        }
+        if (num > 0){
+            res = res + Single[num] + " ";
+        }
+        return res;
+    }
+}
