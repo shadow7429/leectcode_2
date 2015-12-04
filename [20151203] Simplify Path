@@ -1,0 +1,24 @@
+/*
+这道题，又忘了path是怎么回事儿了。。。TAT。就是如果..就返回上一级，所以将list的最后一个删除，如果.就是当前目录，就不用添加，若是
+字母就添加就完啦。然后要注意的是如果没有字母最后存在在list中，只返回一个/，若是有则每个string之间用/相隔，但是最后没有多余的/，所以
+用一个if条件来删除多加上的一个/。
+*/
+
+public class Solution {
+    public String simplifyPath(String path) {
+        if (path.length() == 0) return "";
+        StringBuilder sb = new StringBuilder("/");
+        LinkedList<String> l = new LinkedList<String>();
+        for (String s : path.split("/")){
+            if (s.equals("..")){
+                if (!l.isEmpty()) l.removeLast();
+            }
+            else 
+            if (!s.equals(".") && !s.equals("")) l.add(s);
+        }
+        for (String s : l) sb.append(s + "/");
+        if (!l.isEmpty()) sb.setLength(sb.length() - 1);
+
+        return sb.toString();
+    }
+}
