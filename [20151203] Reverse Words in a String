@@ -1,0 +1,23 @@
+// startTime: 20: 31
+// finishTime: 20: 39
+// https://leetcode.com/problems/reverse-words-in-a-string/
+
+/*
+要考虑的几点问题：
+1. 字符串可能并不是每个单词之间都是一个空格，因此split的方法应该是slip("\\s+")而不是split(" ")。
+2. 转换过来的字符串直接进行一步trim吧比较省心。
+*/
+
+public class Solution {
+    public String reverseWords(String s) {
+        StringBuilder sb = new StringBuilder();
+        if (s.indexOf(" ") == -1) return s;
+        String[] st = s.split("\\s+");
+        for (int i = st.length - 1; i >= 0; i--){
+            sb.append(st[i] + " ");
+        }
+        String res = sb.toString();
+        res = res.trim();
+        return res;
+    }
+}
