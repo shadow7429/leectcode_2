@@ -1,0 +1,47 @@
+// startTime: 20: 51
+// finishTime: 21: 29
+// https://leetcode.com/problems/restore-ip-addresses/
+
+
+/*
+这道题其实就是将一个string连续分成4段，然后看符合条件约束就加入到list中，不符合则跳过。
+要注意的是，因为最后一个变量控制了两个string，所以前面的三个string如果已经大于255或者
+对0的限制已经不符合条件，那么就可直接break掉，因为随着变量变大他们的长度会增长，但是
+s4随着c的变大s4是变短的，所以它不符合条件的时候应该continue。
+遇到这种题的第一反应是递归，但这道题因为就是一个固定的string连续分成4段，所以就进行一个
+嵌套的循环即可。
+*/
+public class Solution {
+    public List<String> restoreIpAddresses(String s) {
+        List<String> res = new ArrayList<String>();
+        if (s.length() < 4) return res;
+        for (int a = 1; a < s.length() - 2; a++){
+            
+            String s1 = s.substring(0, a);
+            if (a > 3 || Integer.valueOf(s1) > 255) break;
+            if (s1.charAt(0) == '0' && a > 1) break;
+            
+            for (int b = a + 1; b < s.length() - 1; b++){
+                
+                String s2 = s.substring(a, b);
+                if (b - a > 3 || Integer.valueOf(s2) > 255) break;
+                if (s2.charAt(0) == '0' && b - a > 1) break;
+                
+                for (int c = b + 1; c < s.length(); c++){
+                    
+                    String s3 = s.substring(b, c);
+                    if (c - b > 3 || Integer.valueOf(s3) > 255) break;
+                    if (s3.charAt(0) == '0' && c - b > 1) break;
+                    
+                    String s4 = s.substring(c);
+                    if (s.length() - c > 3 || Integer.valueOf(s4) > 255) continue;
+                    if (s4.charAt(0) == '0' && s.length() - c > 1) continue;
+                    
+                    
+                    res.add(s1 + "." + s2 + "." + s3 + "." + s4);
+                }
+            }
+        }
+        return res;
+    }
+}
