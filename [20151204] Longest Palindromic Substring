@@ -1,0 +1,42 @@
+// startTime: 18: 21
+// finishTime: 18: 46
+// https://leetcode.com/problems/longest-palindromic-substring/
+
+/*
+这道题就是求一个最长的，所以不用求出所有的palindrome，只要记录下来每个地方是不是palindrome然后把最长的
+保存着以备下一次比较长度更新即可。
+这道题的方法就是用一个二维数组来存储从j到i位置的子串是不是palindrome，然后更新helper数组对应的布尔值，
+随着s的遍历，内层循环是从头进行，要是想让当前i位置是某个palindrome的末尾，那么就要存在一个开端使得其位置
+的字符等于s.charAt(i), 并且两个位置中间的子串应该是palindrome。
+*/
+public class Solution {
+    public String longestPalindrome(String s) {
+        if (s.length() < 2) return s;
+        boolean [][] helper = new boolean[s.length()][s.length()];
+        int len = 0;
+        String res = "";
+        for (int i = 0; i < s.length(); i++) helper[i][i] = true;
+        for (int i = 1; i < s.length(); i++){
+            for (int j = 0; j < i; j++){
+                if (s.charAt(i) != s.charAt(j)) continue;
+                if (j == i - 1){
+                    if (i - j + 1 > len){
+                        len = i - j + 1;
+                        res = s.substring(j, i + 1);
+                    }
+                    helper[j][i] = true;
+                }
+                else{
+                    if (helper[j + 1][i - 1] == true){
+                        if (i - j + 1 > len){
+                            len = i - j + 1;
+                            res = s.substring(j, i + 1);
+                        }
+                        helper[j][i] = true;
+                    }
+                }
+            }
+        }
+        return res;
+    }
+}
