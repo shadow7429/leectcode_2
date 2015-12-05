@@ -1,0 +1,18 @@
+// startTime: 10: 40
+// finishTime: 10: 58
+// https://leetcode.com/problems/h-index-ii/
+
+public class Solution {
+    public int hIndex(int[] nums) {
+        if (nums.length == 0) return 0;
+        for (int i = 0; i < nums.length; i++){
+            if (i == 0){
+                if (nums[i] >= nums.length) return Math.min(nums[i], nums.length);
+            }
+            else{
+                if (nums[i] >= nums.length - i && nums[i - 1] <= nums.length - i) return Math.min(nums[i], nums.length - i);
+            }
+        }
+        return 0;
+    }
+}
