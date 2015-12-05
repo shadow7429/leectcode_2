@@ -1,0 +1,34 @@
+// startTime: 22: 43
+// finishTime: 23: 07
+// https://leetcode.com/problems/search-a-2d-matrix-ii/
+
+/*
+关于搜索一个数的一般都是用二叉搜索，所以遇到找东西首先要想可不可以优化搜索方法。
+最开始找行的时候也可以用二叉搜索。
+*/
+
+public class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        if (matrix.length == 0 || matrix[0].length == 0) return false;
+        int rowend = -1;
+        for (int i = 0; i < matrix.length; i++){
+            if (matrix[i][0] == target) return true;
+            else if (matrix[i][0] < target) rowend = i;
+            else break;
+        }
+        if (rowend == -1) return false;
+        int column = 0;
+        for (;column < matrix[rowend].length; column++){
+            if (matrix[0][column] > target) return false;
+            int lo = 0;
+            int hi = rowend;
+            while (lo <= hi){
+                int mid = lo + (hi - lo) / 2;
+                if (matrix[mid][column] == target) return true;
+                else if (matrix[mid][column] > target) hi = mid - 1;
+                else lo = mid + 1;
+            }
+        }
+        return false;
+    }
+}
