@@ -1,0 +1,42 @@
+// startTime: 20: 07
+// finishTime: 21: 08
+// https://leetcode.com/problems/decode-ways/
+
+/*
+一直在少考虑情况，所以一直在改，需要考虑的是：
+1. 字符串为空
+2. 字符串第一位为0
+3. 字符串有连续两位为0
+4. 字符串中有0，但是该0前面的一位不能带它形成两位数
+5. i和i+1位可形成一个数（记住考虑17这种情况）
+对于5中的情形不用考虑i和i-1位的情况，因为之前都已经考虑过了，这种动态规划的问题，只需要考虑当前位和前面一位的情况就好。
+*/
+
+public class Solution {
+    public int numDecodings(String s) {
+        if (s.length() == 0) return s.length();
+        int[] helper = new int[s.length() + 1];
+        helper[0] = 1;
+        
+        for (int i = 0; i < s.length(); i++){
+            if (i == 0){
+                if (s.charAt(i) - '0' == 0) return 0;
+                helper[i + 1] = helper[i];
+                continue;
+            }
+            if (s.charAt(i) - '0' == 0){
+                if (s.charAt(i - 1) - '0' == 0 || 
+                    s.charAt(i - 1) - '0'> 2) return 0;
+                else helper[i + 1] = helper[i];
+            }
+            else if ((s.charAt(i) - '0' > 6 && s.charAt(i - 1) - '0' > 1)|| 
+                     s.charAt(i - 1) - '0' > 2 || 
+                     s.charAt(i - 1) - '0' == 0) helper[i + 1] = helper[i];
+            else {
+                if (i < s.length() - 1 && s.charAt(i + 1) - '0' == 0) helper[i + 1] = helper[i];
+                else helper[i + 1] = helper[i] + helper[i - 1];
+            }
+        }
+        return helper[s.length()];
+    }
+}
