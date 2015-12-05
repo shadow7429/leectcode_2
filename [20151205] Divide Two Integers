@@ -1,0 +1,40 @@
+// startTime: 11: 22
+// finishTime: 11: 53
+// https://leetcode.com/problems/divide-two-integers/
+
+/*
+这道题虽然是求商，但是不能用乘除取余所以只能一个个加，所以不能直接用二叉搜索商。
+思考一下怎么能在加减上进行优化，每次都减一个被除数肯定是最naive的方式，因为可能被除数很大，除数为1，
+这样非常浪费时间，所以我们采取的措施是，除数每次都以之前的2倍进行增长，然后递归调用helper函数，传入
+剩下的被除数，和最初的除数，最后将这些商加和即可。但是这里存在符号问题，符号问题必定会带来溢出问题，
+因为将负数变为正数或者正数变为负数的时候可能大于integer的边界，因为我们以long的类型传入helper函数，
+最后对helper返回的结果大小进行判断，若是超出了integer边界就另行进行输出。
+还有对于对数字进行加减乘除的运算，我们最好最开始将数字都化为正数，然后将符号的问题存储起来最后再进行
+结果的调整。
+*/
+public class Solution {
+    public int divide(int dividend, int divisor) {
+        boolean samesign = ((dividend >= 0 && divisor > 0) || (dividend <= 0 && divisor < 0)) ? true : false;
+        long dividendtmp = Math.abs((long)dividend);
+        long divisortmp = Math.abs((long)divisor);
+        long res = helper(dividendtmp, divisortmp);
+        res = samesign == true ? res : - res;
+        if (res > (long)Integer.MAX_VALUE) return Integer.MAX_VALUE;
+        else if (res < (long) Integer.MIN_VALUE) return Integer.MIN_VALUE;
+        return (int)res;
+    }
+    public long helper(long dividend, long divisor){
+        if (dividend < divisor) return 0;
+        long r = 1;
+        dividend = dividend - divisor;
+        long divisortmp = divisor;
+        long rr = 1;
+        while (dividend > divisortmp + divisortmp){
+            divisortmp = divisortmp + divisortmp;
+            dividend = dividend - divisortmp;
+            rr = rr * 2;
+            r = r + rr;
+        }
+        return r + helper(dividend, divisor);
+    }
+}
