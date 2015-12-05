@@ -1,0 +1,70 @@
+// startTime: 忘了记了。。。
+// finishTime: 22: 06
+// https://leetcode.com/problems/basic-calculator-ii/
+
+
+/*
+这道题的思路如下：
+1. 对于这一类的利用stack操作数字之间加减乘除的题目，+号和-号都是作为正负来看的，然后将数字
+   存放在stack中，最后全部加和。
+2. 遇到下一个加号或者减号的时候就把前面得到的数字压入stack中。
+3. 遇到乘号或除号的时候，就求出后面的数字然后与当前的数字做对应的运算并把结果压入stack中，
+   注意这个时候不用pop，因为当前数字还没有压入stack中因为只有遇到+和-的时候才压入。
+4. 不能遇到isDigit的就压入，因为不一定只有一位数，可能出现23，567等数字，因此可能连续几位
+   都是数字，需要我们做num = num * 10 + ...的运算。
+5. 对于最后一个数字因为后面没有+和-所以整个循环结束之后要将最后一个数压入stack中。
+6. 遇到+和-意味着下一个数字要开始了，因此要更新sign的值，记录下一个数字应该是正还是负。
+*/
+public class Solution {
+    public int calculate(String s) {
+        if (s.length() == 0) return 0;
+        Stack<Integer> stack = new Stack<Integer>();
+        boolean sign = true;
+        int i = 0; 
+        int num = 0;
+        
+        while (i < s.length()){
+            char c = s.charAt(i);
+            if (c == ' '){
+                i++; 
+                continue;
+            }
+            else if (Character.isDigit(c)){
+                num = num * 10  + c - '0';
+                i++;
+            }
+            else if (c == '+' || c == '-'){
+                num = sign == true ? num : -num;
+                stack.push(num);
+                sign = c == '+' ? true : false;
+                num = 0;
+                i++;
+            }
+            else if (c == '*' || c == '/'){
+                int j = i + 1;
+                int num2 = 0;
+                
+                while (j < s.length() && (s.charAt(j) == ' ' || Character.isDigit(s.charAt(j)))){
+                    if (s.charAt(j) == ' '){
+                        j ++; 
+                        continue;
+                    }
+                    else {
+                        num2 = num2 * 10 + s.charAt(j) - '0';
+                        j++;
+                    }
+                }
+                if (c == '*') num = num * num2;
+                else num = num / num2;
+                i = j;
+            }
+        }
+        num = sign == true ? num : - num;
+        stack.push(num);
+        int res = 0;
+        while (!stack.isEmpty()){
+            res = res + stack.pop();
+        }
+        return res;
+    }
+}
