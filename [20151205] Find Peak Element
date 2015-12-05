@@ -1,0 +1,24 @@
+// https://leetcode.com/problems/find-peak-element/
+
+/*
+这道题第一反应就是循环遍历一下对每个数字进行左右的比较即可，题目中也没有做出时间的限制。
+discussion的方法是用二叉搜索，用两个mid: mid1, mid2若是mid1处的值大于mid2处的值就将hi = mid1；
+反之则将lo = mid2. 这样做的原因是因为我们逐步的把那些小于neighbors的index剔除干净，最后当lo和
+hi指向一个的时候，这个值一定是大于左右的。因为它的左右都被剔除了，那么就说明它的左右都小于他们
+各自的左右，所以它们一定小于该值。
+*/
+
+public class Solution {
+    public int findPeakElement(int[] nums) {
+        if (nums.length == 0) return 0;
+        int lo = 0;
+        int hi = nums.length - 1;
+        while (lo < hi){
+            int mid1 = lo + (hi - lo) / 2;
+            int mid2 = mid1 + 1;
+            if (nums[mid1] < nums[mid2]) lo = mid2;
+            else if (nums[mid1] > nums[mid2]) hi = mid1;
+        }
+        return lo;
+    }
+}
