@@ -1,0 +1,26 @@
+// https://leetcode.com/problems/count-complete-tree-nodes/
+
+// 第一想法的结果就是超时的，实际上遍历到了倒数第二层了都。
+public class Solution {
+    public int countNodes(TreeNode root) {
+        if (root == null) return 0;
+        int p = 0;
+        LinkedList<TreeNode> l = new LinkedList<TreeNode>();
+        l.add(root);
+        while (true){
+            TreeNode f = l.removeFirst();
+            p++;
+            if (f.left != null && f.right != null){
+                l.add(f.left);
+                l.add(f.right);
+            }
+            else if (f.left != null){
+                return p + l.size() + 1;
+            }
+            else {
+                return p + l.size();
+            }
+        }
+    }
+}
+
