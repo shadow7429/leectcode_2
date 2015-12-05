@@ -1,0 +1,39 @@
+// startTime: 19: 12
+// finishTime: 19: 52
+// https://leetcode.com/problems/generate-parentheses/
+
+/*
+对于合法括号问题，如果只是判断括号字符串是否合法，就只需要用stack即可。
+若是得到所有的合法括号采取的策略是拿到当前的合法序列，在其中每个字符两边都加一个括号对，并且在序列前后
+加入一个括号对，这样循环遍历一遍当前字符串就可以得到再多增加一对括号的合法序列了。例如：
+n = 3时：
+1. ()
+2. 分别在1中的每个字符两边加入左右括号得到序列：(() )  ( ()) 因为这俩相同所以只保留一个；再在1中的字符串
+的左边和右边加一个括号对，若相同也只保留一个则: ()() 所以这一轮得到两个串：()() | (())
+之后也一直进行一样的操作，直到加入了所有的括号对。
+这样做一定合法的原因是因为，出现不合法的情况就是某位置左边的左括号个数小于右边的右括号个数，所以我们都一对
+一对的加，这样就不改变原来左右括号的相对数量了，所以一定合法。
+*/
+
+public class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> res = new ArrayList<String>();
+        if (n == 0) return res;
+        res.add("()");
+        for (int i = 1; i < n; i++){
+            List<String> ltmp = new ArrayList<String>();
+            for (int j = 0; j < res.size(); j++){
+                String s = res.get(j);
+                if (!ltmp.contains("()" + s)) ltmp.add("()" + s);
+                if (!ltmp.contains(s + "()")) ltmp.add(s + "()");
+                for (int k = 0; k < s.length(); k++){
+                    String stmp = s.substring(0, k) + "(" + s.charAt(k) + ")" + s.substring(k + 1);
+                    if (!ltmp.contains(stmp)) ltmp.add(stmp);
+                }
+            }
+            res.clear();
+            res.addAll(ltmp);
+        }
+        return res;
+    }
+}
