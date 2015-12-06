@@ -1,0 +1,39 @@
+// 没做出来，对这一类型的题目很吃力，思路不清晰。
+// https://leetcode.com/problems/different-ways-to-add-parentheses/
+
+/*
+给算式表达式加括号来求结果的题，实际上就是看哪个符号先算哪个后算，如果确定下来哪个后算，就将
+它左右的算完然后再将两部分的结果按照该符号运算即可，所以可知道应该用递归方法。
+例如对于式子 2 * 3 + 4 * 5 - 3这个式子来说，总共有4个运算符，所以我们循环一遍，遇到每一个运算
+符的时候，我们就假设最后算该运算符，所以要先将这个运算符左右的式子算出结果，所以递归传入左右的
+子字符串，对于第一个乘号来说，左侧只有一个数值，右侧是子字符串3 + 4 * 5 - 3，这个子字符串也是
+一样有几个运算符，所以也一样可以有几种最后算的运算符方式，所以继续递归调用，最后每次递归调用
+都会返回一个list的数值，这个数值代表着该串字符串可能的结果，返回到最上层的时候，将 * 左右返回
+的list中的值循环进行操作，就可以得到最后总共有多少种可能的结果了。
+*/
+public class Solution {
+    public List<Integer> diffWaysToCompute(String input) {
+        List<Integer> res = new LinkedList<Integer>();
+        for (int i = 0; i < input.length(); i++){
+            if (input.charAt(i) == '+' ||
+                input.charAt(i) == '-' ||
+                input.charAt(i) == '*'){
+                    String part1 = input.substring(0, i);
+                    String part2 = input.substring(i + 1);
+                    List<Integer> part1Ret = diffWaysToCompute(part1);
+                    List<Integer> part2Ret = diffWaysToCompute(part2);
+                    for (Integer i1 : part1Ret){
+                        for (Integer i2 : part2Ret){
+                            switch (input.charAt(i)){
+                                case '+' : res.add(i1 + i2); break;
+                                case '-' : res.add(i1 - i2); break;
+                                case '*' : res.add(i1 * i2); break;
+                            }
+                        }
+                    }
+                }
+        }
+        if (res.size() == 0) res.add(Integer.valueOf(input));
+        return res;
+    }
+}
