@@ -1,0 +1,51 @@
+// https://leetcode.com/problems/count-complete-tree-nodes/
+
+// Discuss 答案
+/*
+一颗满完全二叉树所有节点个数和树的深度之间的关系是nodenum = 2 ^ height - 1; 本题的思路是，对于一个
+树来说，如果它不是满的，那么我从最左边走到底跟从最右边走到底的深度一定不同，所以我就找到最小的那一颗
+不满的二叉树，如果一棵子树是满的，那么就不向下走了，直接返回该子树的节点个数。同时由于完全二叉树的
+特点，肯定是右侧最先不满，所以走到右边为null判断左边是不是也是null就可以知道这棵树是不是满的。
+注意：1 << x 是求 Math.pow(2,x)， 相当于把1向左移动了x位。
+*/
+public class Solution {
+    public int countNodes(TreeNode root) {
+        if (root == null) return 0;
+        TreeNode left = root;
+        TreeNode right = root;
+        int height = 0;
+        while (right != null){
+            left = left.left;
+            right = right.right;
+            height++;
+        }
+        if (left == null) return (1 << height) - 1;
+        else return 1 + countNodes(root.left) + countNodes(root.right);
+    }
+}
+
+
+// 第一想法的结果就是超时的，实际上遍历到了倒数第二层了都。
+public class Solution {
+    public int countNodes(TreeNode root) {
+        if (root == null) return 0;
+        int p = 0;
+        LinkedList<TreeNode> l = new LinkedList<TreeNode>();
+        l.add(root);
+        while (true){
+            TreeNode f = l.removeFirst();
+            p++;
+            if (f.left != null && f.right != null){
+                l.add(f.left);
+                l.add(f.right);
+            }
+            else if (f.left != null){
+                return p + l.size() + 1;
+            }
+            else {
+                return p + l.size();
+            }
+        }
+    }
+}
+
