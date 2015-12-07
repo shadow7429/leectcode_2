@@ -1,0 +1,58 @@
+// 超时，所以算没做出来
+// https://leetcode.com/problems/burst-balloons/
+
+//用list进行操作
+public class Solution {
+    public int maxCoins(int[] nums) {
+        List<Integer> l = new ArrayList<Integer>();
+        for (int i : nums) l.add(i);
+        return helper(l);
+    }
+    public int helper(List<Integer> l){
+        if (l.size() <= 0) return 0;
+        int res = 0;
+        for (int i = 0; i < l.size(); i++){
+            List<Integer> tmp = new ArrayList<Integer>(l);
+            tmp.remove(i);
+            int left = 1;
+            int right = 1;
+            if (i - 1 >= 0) left = l.get(i - 1);
+            if (i + 1 < l.size()) right = l.get(i + 1);
+            int tr = l.get(i) * left * right + helper(tmp);
+            res = Math.max(res, tr);
+        }
+        return res;
+    }
+}
+
+// Discuss上的答案【DP】
+/*
+DP方法的解决思路就是将可以炸得范围从长度从1扩展到nums.length，然后对每一个长度，起炸点从0一直到相应位置，
+目的就是在每一个范围内找最后炸得点（跟递归的思路一样，就是找最后炸点）。在每一个范围内（start-end），
+因为最后炸i点，所以start ~ i - 1的获得最多coin的方案已经知道将结果保存在dp[start][i - 1]中，同样将
+dp[i + 1][end]的结果也保存起来了，然后在最后炸i点的时候，i的左边为start - 1, i的右边为 end + 1,（特殊情况
+特殊判断即可），然后将这一段的这两个dp值以及最后炸得到的coin值相加求最大即得到dp[start][end]的值，所以
+可以知道，最后我们要求的结果就是dp[0][nums.length - 1]的值。
+*/
+public class Solution {
+    public int maxCoins(int[] nums) {
+        if (nums.length == 0 || nums == null) return 0;
+        int [][] dp = new int[nums.length][nums.length];
+        for (int len = 1; len <= nums.length; len++){
+            for (int start = 0; start <= nums.length - len; start++){
+                int end = start + len - 1;
+                for (int i = start; i <= end; i++){
+                    int coins = nums[i] * getValue(nums, start - 1) * getValue(nums, end + 1);
+                    coins = coins + (i != start ? dp[start][i - 1] : 0);
+                    coins = coins + (i != end ? dp[i + 1][end] : 0);
+                    dp[start][end] = Math.max(dp[start][end], coins);
+                }
+            }
+        }
+        return dp[0][nums.length - 1];
+    }
+    public int getValue(int[] nums, int i){
+        if (i < 0 || i >= nums.length) return 1;
+        else return nums[i];
+    }
+}
