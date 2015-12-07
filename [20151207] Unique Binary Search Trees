@@ -1,0 +1,31 @@
+// startTime: 12: 15
+// finishTime: 12:30
+// https://leetcode.com/problems/unique-binary-search-trees/
+
+// 需要注意的地方如标注
+
+public class Solution {
+    int[][] dp;
+    public int numTrees(int n) {
+        if (n == 0) return 0;
+        dp = new int[n + 1][n + 1];               //--------------------------数组的长度
+        helper(1, n);
+        return dp[1][n];
+    }
+    
+    public int helper(int start, int end){
+        if (start > end) return 1;                // 当一只没有节点的时候，应该返回1而不是0，因为左右只是要进行乘法而不是加法。
+        if (start == end) {
+            dp[start][end] = 1;                   // 这里不要忘记对dp的更新
+            return dp[start][end];
+        }
+        if (dp[start][end] > 0) return dp[start][end];
+        for (int i = start; i <= end; i++){
+            int left = helper(start, i - 1);
+            int right = helper(i + 1, end);
+            dp[start][end] = dp[start][end] + left * right;
+        }
+        
+        return dp[start][end];
+    }
+}
