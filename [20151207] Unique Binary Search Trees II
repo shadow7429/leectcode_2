@@ -1,0 +1,57 @@
+// startTime: 12: 42
+// finishTime: 13: 07
+// https://leetcode.com/problems/unique-binary-search-trees-ii/
+
+/*
+其实跟unique bst1思路一样，但是多了建立树的过程，并且动态规划dp存储的也不只是有多少种方式了，而是
+存了不同方式的root。并且要记住返回一棵树只需要返回该树的根节点即可。
+*/
+public class Solution {
+    ArrayList<TreeNode>[][] dp;
+    public List<TreeNode> generateTrees(int n) {
+        dp = new ArrayList[n + 1][n + 1];
+        if (n == 0) return new ArrayList<TreeNode>();
+        return helper(1, n);
+    }
+    public ArrayList<TreeNode> helper(int start, int end){
+        ArrayList<TreeNode> res = new ArrayList<TreeNode>();
+        if (start > end) return null;
+        if (start == end){
+            dp[start][end] = new ArrayList<TreeNode>();
+            dp[start][end].add(new TreeNode(start));
+            return dp[start][end];
+        }
+        if (dp[start][end] != null) return dp[start][end];
+        for (int i = start; i <= end; i++){
+            TreeNode tmproot = new TreeNode(i);
+            ArrayList<TreeNode> left = helper(start, i - 1);
+            ArrayList<TreeNode> right = helper(i + 1, end);
+            if (left == null && right == null) res.add(tmproot);
+            else if (left == null){
+                for (TreeNode r : right){
+                    tmproot = new TreeNode(i);
+                    tmproot.right = r;
+                    res.add(tmproot);
+                }
+            }
+            else if (right == null){
+                for (TreeNode l : left){
+                    tmproot = new TreeNode(i);
+                    tmproot.left = l;
+                    res.add(tmproot);
+                }
+            }
+            else {
+                for (TreeNode l : left){
+                    for (TreeNode r : right){
+                        tmproot = new TreeNode(i);
+                        tmproot.left = l;
+                        tmproot.right = r;
+                        res.add(tmproot);
+                    }
+                }
+            }
+        }
+        return res;
+    }
+}
