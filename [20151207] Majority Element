@@ -1,0 +1,15 @@
+// startTime: 10: 21
+// finishTime: 10: 30
+// https://leetcode.com/problems/majority-element/
+
+/*
+思路就是若是在一个数组中存在一个数字出现了超过n/2次，那么将该数组排序之后index = n/2地方的
+数字一定是这个数。
+*/
+
+public class Solution {
+    public int majorityElement(int[] nums) {
+        Arrays.sort(nums);
+        return nums[nums.length / 2];
+    }
+}
