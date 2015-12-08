@@ -1,0 +1,27 @@
+// 中间因为去弄紧急作业，所以耽搁了
+// https://leetcode.com/problems/house-robber-ii/
+
+/*
+这道题的思路其实就是，原来只是两次rob不能相邻，现在多加了一个条件就是有第一个就不能有最后一个，
+所以我们就分成两个数组，一个是有第一个的，一个是没有第一个的，然后其他按照原来的思路就可以了。
+*/
+
+public class Solution {
+    public int rob(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        if (nums.length == 1) return nums[0];
+        int[] helper1 = new int[nums.length + 1];
+        int[] helper2 = new int[nums.length + 1];
+        helper1[0] = 0;
+        helper1[1] = nums[0];
+        helper2[0] = 0;
+        helper2[1] = 0;
+        for (int i = 1; i < nums.length; i++){
+            helper1[i + 1] = Math.max(helper1[i], helper1[i - 1] + nums[i]);
+        }
+        for (int i = 1; i < nums.length; i++){
+            helper2[i + 1] = Math.max(helper2[i], helper2[i - 1] + nums[i]);
+        }
+        return Math.max(helper1[nums.length - 1], helper2[nums.length]);
+    }
+}
