@@ -1,0 +1,24 @@
+// startTime: 22: 30
+// finishTime: 22: 35 [EASY的题]
+// https://leetcode.com/problems/summary-ranges/
+
+public class Solution {
+    public List<String> summaryRanges(int[] nums) {
+        List<String> res = new ArrayList<String>();
+        if (nums.length == 0) return res;
+        int start = nums[0];
+        for (int i = 1; i < nums.length; i++){
+            if (nums[i] == nums[i - 1] + 1) continue;
+            else{
+                String s = nums[i - 1] + "";
+                if (start != nums[i - 1]) s = start + "->" + s;
+                res.add(s);
+                start = nums[i];
+            }
+        }
+        String stmp = nums[nums.length - 1] + "";
+        if (start != nums[nums.length - 1]) stmp = start + "->" + stmp;
+        res.add(stmp);
+        return res;
+    }
+}
