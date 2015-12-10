@@ -1,0 +1,27 @@
+// https://leetcode.com/problems/peeking-iterator/
+
+class PeekingIterator implements Iterator<Integer> {
+    LinkedList<Integer> a;
+	public PeekingIterator(Iterator<Integer> iterator) {
+	    // initialize any member here.
+	    a = new LinkedList<Integer>();
+	    while (iterator.hasNext()) a.add(iterator.next());
+	}
+
+    // Returns the next element in the iteration without advancing the iterator.
+	public Integer peek() {
+        return a.get(0);
+	}
+
+	// hasNext() and next() should behave the same as in the Iterator interface.
+	// Override them if needed.
+	@Override
+	public Integer next() {
+	    return a.removeFirst();
+	}
+
+	@Override
+	public boolean hasNext() {
+	    return a.size() > 0;
+	}
+}
