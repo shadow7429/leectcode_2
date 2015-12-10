@@ -1,0 +1,55 @@
+// https://leetcode.com/problems/shortest-palindrome/
+
+//超时
+public class Solution {
+    public String shortestPalindrome(String s) {
+        String res = "";
+        if (s.length() == 0) return res;
+        int index = s.length() / 2 - 1;
+        int lastindex = index + 1;
+        for (; index >= 0; index--){
+            String left1 = s.substring(0, index + 1);
+            String right1 = s.substring(index + 1, 2 * index + 2);
+            String left2 = s.substring(0, index);
+            String right2 = s.substring(index + 1, 2 * index + 1);
+            if (checkPalin(left1, right1) == true || checkPalin(left2, right2) == true){
+                if (checkPalin(left1, right1) == true) lastindex = index + index + 2;
+                else lastindex = index + index + 1;
+                break;
+            }
+        }
+        while (lastindex < s.length()) {
+            res = s.charAt(lastindex) + res;
+            lastindex++;
+        }
+        return res + s;
+    }
+    public boolean checkPalin(String s1, String s2){
+        if (s1.length() == 0 && s2.length() == 0) return true;
+        for (int i = 0; i < s1.length(); i++){
+            if (s1.charAt(s1.length() - i - 1) != s2.charAt(i)) return false;
+        }
+        return true;
+    }
+}
+
+// Discuss上的方法
+/*
+The idea is to use two anchors j and i to compare the String from beginning and end. If j can reach the end, 
+the String itself is Palindrome. Otherwise, we divide the String by j, and get mid = s.substring(0, j) and suffix.
+注意，如果j没走到最后的话就说明从前往后走和从后往前走肯定是有至少一个字符不一样的，而且这里构造回文只能在最前面
+加入，所以最前面加的肯定和本身字符串最后的字符是一样的，因为如果至少添加一个新的，那一定是加最后面的，所以依次递归
+下去添加，最后可得到正确答案。如果本身字符串是回文的话，那么随着i向前走，对应从前向后走的j一定会到达最后，因为没有
+对应位置是不一样的。此时就直接返回这个字符串即可。
+*/
+public class Solution {
+    public String shortestPalindrome(String s) {
+        int j = 0;
+        for (int i = s.length() - 1; i >= 0; i--){
+            if (s.charAt(i) == s.charAt(j)) j++;
+        }
+        if (j == s.length()) return s;
+        String suffix = s.substring(j);
+        return new StringBuffer(suffix).reverse().toString() + shortestPalindrome(s.substring(0, j)) + suffix;
+    }
+}
