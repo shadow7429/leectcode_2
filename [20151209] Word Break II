@@ -1,0 +1,48 @@
+// startTime: 20: 11
+// finsihTime: 21: 21
+// https://leetcode.com/problems/word-break-ii/
+
+/*
+这道题就是利用动态规划，只是以前动态规划一般都是一个简单的数组要么记录下来boolean的状态，要么
+记录下来某个index的数值，这里的dp数组是一个ArrayList<String>[]数组，记录下来的是s中从该位置
+开始向下产生的所有valid的string，可以知道将它与前面的string拼接起来就是前面的index对应的dp了。
+注意这里如果从某位置向下可以得到结果的话ArrayList不为null，若是不能，则将该index对应的dp赋值为
+null。
+*/
+public class Solution {
+    List<String>[] dp;
+    public List<String> wordBreak(String s, Set<String> wordDict) {
+        List<String> res = new ArrayList<String>();
+        if (s.length() == 0) return res;
+        dp = new ArrayList[s.length()];
+        for (int i = 0; i < dp.length; i++) dp[i] = new ArrayList<String>();
+        res = helper(s, wordDict, 0);
+        return res == null ? new ArrayList<String>() : res;
+    }
+    public List<String> helper(String s, Set<String> wordDict, int index){
+        List<String> res = new ArrayList<String>();
+        if (index >= s.length()){
+            res.add("");
+            return res;
+        } 
+        if (dp[index] == null) return null;
+        if (dp[index] != null && dp[index].size() > 0) return dp[index];
+        dp[index] = new ArrayList<String>();
+        for (int i = index + 1; i <= s.length(); i++){
+            if (wordDict.contains(s.substring(index, i))){
+                List<String> tmp = helper(s, wordDict, i);
+                if (tmp == null) continue;
+                for (String tmps : tmp){
+                    tmps = tmps.trim();
+                    String ss = s.substring(index, i) + " " + tmps;
+                    ss = ss.trim();
+                    dp[index].add(ss);
+                }
+            }
+        }
+        if (dp[index].size() == 0){
+            dp[index] = null;
+        }
+        return dp[index];
+    }
+}
