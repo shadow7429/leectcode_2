@@ -1,0 +1,41 @@
+// startTime: 22: 13
+// finisTime: 22: 21
+// https://leetcode.com/problems/valid-parentheses/
+
+public class Solution {
+    public boolean isValid(String s) {
+        if (s.length() == 0) return true;
+        Stack<Character> stack = new Stack<Character>();
+        for (int i = 0; i < s.length(); i++){
+            if (s.charAt(i) == '(' || 
+                s.charAt(i) == '{' ||
+                s.charAt(i) == '[') stack.push(s.charAt(i));
+            else{
+                if (stack.isEmpty()) return false;
+                else if (s.charAt(i) == ')'){
+                    if (stack.peek() == '(') stack.pop();
+                    else if (stack.peek() == ')' ||
+                             stack.peek() == '}' ||
+                             stack.peek() == ']') stack.push(')');
+                    else return false;
+                }
+                else if (s.charAt(i) == ']'){
+                    if (stack.peek() == '[') stack.pop();
+                    else if (stack.peek() == ')' ||
+                             stack.peek() == '}' ||
+                             stack.peek() == ']') stack.push(']');
+                    else return false;
+                }
+                else if (s.charAt(i) == '}'){
+                    if (stack.peek() == '{') stack.pop();
+                    else if (stack.peek() == ')' ||
+                             stack.peek() == '}' ||
+                             stack.peek() == ']') stack.push('}');
+                    else return false;
+                }
+            }
+        }
+        if (stack.isEmpty() == true) return true;
+        else return false;
+    }
+}
