@@ -1,0 +1,22 @@
+// 最后这四天做一些google tech interview的面经题
+// https://leetcode.com/problems/plus-one/
+
+public class Solution {
+    public int[] plusOne(int[] digits) {
+        ArrayList<Integer> helper = new ArrayList<Integer>();
+        int carry = 1;
+        for (int i = digits.length - 1; i >= 0; i--){
+            if (carry == 0) break;
+            int tmp = (digits[i] + carry) % 10;
+            carry = (digits[i] + carry) / 10;
+            digits[i] = tmp;
+        }
+        if (carry == 0) return digits;
+        else{
+            int[] res = new int[digits.length + 1];
+            res[0] = 1;
+            for (int i = 1; i <= digits.length; i++) res[i] = digits[i - 1];
+            return res;
+        }
+    }
+}
