@@ -1,0 +1,46 @@
+// 这道题leetcode上加锁了，所以没有链接。。
+
+LeetCode: Meeting Rooms
+/*
+Given an array of meeting time intervals consisting of start and end times [[s1,e1],[s2,e2],...] (si < ei), 
+find the minimum number of conference rooms required.
+For example,
+Given [[0, 30],[5, 10],[15, 20]],
+return 2.
+*/
+/*
+这道题里面要用到的一个小技能是之前遇到过的排序问题，一般使用的时候都直接用Arrays.sort()这样，还有Collections
+中的sort要自己会重写Comparator 里面的compare。
+*/
+
+public class MeetingRoomsII {
+    public int minMeetingRooms(Interval[] intervals) {
+        if (intervals == null || intervals.length == 0) {
+            return 0;
+        }
+        Arrays.sort(intervals, (o1, o2) -> {
+            int r = o1.start - o2.start;
+            return r == 0 ? o1.end - o2.end : r;
+        });
+        
+        /*
+        也可以写成：
+        Collections.sort(intervals, new Comparator<Interval>{
+          public int compare(Interval o1, Interval o2){
+            return o1.start == o2.start ? (o1.end - o2.end) : o1.start - o2.start;
+          }
+        });
+        */
+        PriorityQueue<Integer> queue = new PriorityQueue<>();
+        queue.add(intervals[0].end);
+        for (int i = 1; i < intervals.length; i++) {
+            int val = queue.peek();
+            Interval in = intervals[i];
+            if (in.start >= val) {
+                queue.remove(val);
+            }
+            queue.add(in.end);
+        }
+        return queue.size();
+    }
+}
