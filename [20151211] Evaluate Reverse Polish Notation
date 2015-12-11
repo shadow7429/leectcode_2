@@ -1,0 +1,32 @@
+// startTime: 15: 28
+// finishTime: 15: 38
+// https://leetcode.com/problems/evaluate-reverse-polish-notation/
+
+public class Solution {
+    public int evalRPN(String[] tokens) {
+        if (tokens == null || tokens.length == 0) return 0;
+        Stack<Integer> stack = new Stack<Integer>();
+        for (String s : tokens){
+            if (s.equals("+") || s.equals("-") || s.equals("*") || s.equals("/")){
+                int i1 = stack.pop();
+                int i2 = stack.pop();
+                switch (s) {
+                    case "+" :
+                        stack.push(i2 + i1);
+                        break;
+                    case "-" :
+                        stack.push(i2 - i1);
+                        break;
+                    case "*" :
+                        stack.push(i2 * i1);
+                        break;
+                    case "/" :
+                        stack.push(i2 / i1);             //-------------------注意这里是i2 / i1, 而不是i1 / i2
+                        break;
+                }
+            }
+            else stack.push(Integer.valueOf(s));
+        }
+        return stack.pop();
+    }
+}
