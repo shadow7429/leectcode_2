@@ -1,0 +1,53 @@
+// https://leetcode.com/problems/basic-calculator/
+
+
+/*
+这道题跟之前的不一样的点在于加入了括号的成分，那么就要思考括号是用来干什么的，
+括号其实就标志了一个新的值，所以要每次遇到括号之前将遇到括号之前的值存储起来，
+然后进行新值的计算。这里stack的用法跟II中的差别是，这里只是存储括号之前的数值和
+符号，而另一个类似的问题中stack存储的是每一个加了符号的数值。利用了括号左右对称
+的特点，遇到一个右括号的时候肯定之前加入了一个左括号，所以pop出来的肯定是对应的
+左括号的信息。同时，因为这里面不只要记录当前的符号，还要记录下来括号之前的符号，
+所以用1和-1来记录符号信息，方便存储在一个stack中。
+*/
+
+public class Solution {
+    public int calculate(String s) {
+        if (s.length() == 0) return 0;
+        Stack<Integer> stack = new Stack<Integer>();
+        int number = 0;
+        int res = 0;
+        int sign = 1;
+        for (int i = 0; i < s.length(); i++){
+            char c = s.charAt(i);
+            if (c == ' ') continue;
+            if (Character.isDigit(c)) number = number * 10 + c - '0';
+            else if (c == '+'){
+                res = res + number * sign;
+                number = 0;
+                sign = 1;
+            }
+            else if (c == '-'){
+                res = res + number * sign;
+                number = 0;
+                sign = -1;
+            }
+            else if (c == '('){
+                stack.push(res);
+                stack.push(sign);
+                sign = 1;
+                res = 0;
+            }
+            else if (c == ')'){
+                res = res + sign * number;
+                res = res * stack.pop();
+                res = res + stack.pop();
+                //sign = 1;
+                number = 0;
+                //res = 0;
+            }
+        }
+        if (number != 0) res = res + sign * number;
+        return res;
+    }
+}
