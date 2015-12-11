@@ -1,0 +1,28 @@
+// startTime: over 1 hour, still TLE
+// https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/
+
+
+// 超时。。
+public class Solution {
+    public int maxProfit(int[] prices) {
+        if (prices.length < 2) return 0;
+        int[] dp = new int[prices.length];
+        Arrays.fill(dp, 0);
+        return helper(prices, dp, 0);
+    }
+    public int helper(int[] prices, int[] dp, int buyindex){
+        if (buyindex >= prices.length) return 0;
+        if (dp[buyindex] > 0) return dp[buyindex];
+        while (buyindex + 1 < prices.length && prices[buyindex + 1] < prices[buyindex]) buyindex++;
+        int sellindex = buyindex;
+        int i = buyindex;
+        while (i < prices.length){
+            if (prices[i] >= prices[buyindex]){
+                sellindex = i;
+                dp[buyindex] = Math.max(dp[buyindex], prices[sellindex] - prices[buyindex] + helper(prices, dp, sellindex + 2));
+            }
+            i++;
+        }
+        return dp[buyindex];
+    }
+}
