@@ -1,0 +1,22 @@
+// startTime: 23: 10
+// finishTime: 23: 30
+// https://leetcode.com/problems/validate-binary-search-tree/
+
+/*
+这道题里面的二叉搜索树会出现重复的数字，所以要另外加一个重复判断。
+*/
+public class Solution {
+    public boolean isValidBST(TreeNode root) {
+        if (root == null) return true;
+        Set<Integer> s = new HashSet<Integer>();
+        return helper(s, root, Integer.MAX_VALUE, Integer.MIN_VALUE);
+    }
+    public boolean helper(Set<Integer> s, TreeNode node, int max, int min){
+        if (node == null) return true;
+        if (node.val > max || node.val < min) return false;
+        if (!s.add(node.val)) return false;
+        boolean b1 = helper(s, node.left, node.val, min);
+        boolean b2 = helper(s, node.right, max, node.val);
+        return b1 && b2;
+    }
+}
