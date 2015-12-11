@@ -1,0 +1,35 @@
+// startTime: 23: 47
+// finishTime: 24: 05
+// https://leetcode.com/problems/sum-root-to-leaf-numbers/
+
+
+/*
+一般这种从上到下有关所有路径的都会用到list的递归，但是这里因为只是一个数值问题，而且是按位的，
+所以当递归返回的时候我们只需要将刚才改变的量去除即可。还要注意在helper函数中不能当判断node为空
+的时候就将当前的pre加到res中，因为对于一个叶节点左右均为空，此时这个值可能会被加了两遍。
+*/
+public class Solution {
+    int res = 0;
+    int pre = 0;
+    public int sumNumbers(TreeNode root) {
+        helper(root);
+        return res;
+    }
+    public void helper(TreeNode node){
+        if (node == null) {
+            pre = pre * 10;
+            return;
+        }
+        if (node.left == null && node.right == null){
+            pre = pre * 10 + node.val;
+            res = res + pre;
+            return;
+        }
+        pre = pre * 10 + node.val;
+        helper(node.left);
+        pre = pre / 10;
+        helper(node.right);
+        pre = pre / 10;
+        return;
+    }
+}
