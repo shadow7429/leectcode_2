@@ -1,0 +1,21 @@
+// startTime: 23: 50
+// finishTime: 24: 04
+// https://leetcode.com/problems/flatten-binary-tree-to-linked-list/
+
+public class Solution {
+    public void flatten(TreeNode root) {
+        if (root == null) return;
+        helper(root);
+    }
+    public TreeNode helper(TreeNode root){
+        if (root == null) return null;
+        if (root.left == null && root.right == null) return root;
+        TreeNode r = root.right;
+        root.right = helper(root.left);
+        root.left = null;
+        TreeNode tmp = root;
+        while (tmp.right != null) tmp = tmp.right;
+        tmp.right = helper(r);
+        return root;
+    }
+}
