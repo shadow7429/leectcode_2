@@ -21,3 +21,32 @@ public class Solution {
         return count;
     }
 }
+
+/*
+不用排序的方法：
+因为排序的方法里可以用遍历的时候的i来算出count个数，所以不排序我们就需要用一个数据结构
+来记录下来每一个index有多少个，我们选择数组。然后在记录的时候可以知道如果当前index值已经
+大于数组长度了，那么对于我们是没有意义的，不可能是结果，所以我们只需要将这个次数加在len对应
+的count数值上即可。然后我们就成功的将index值作为新数组的i存储起来了，并且新数组里面存的值
+就是这个index出现的次数，我们从后向前累加次数，当当前次数已经大于等于当前index了，那么就说明
+已经存在count这么多至少为index了，len - count的都是小于index的，所以我们就返回当前的index即可。
+这里可以看到我们返回的是index而不是count，因为前后的临界条件都包含等于。
+*/
+public class Solution {
+    public int hIndex(int[] citations) {
+        if (citations == null || citations.length == 0) return 0;
+        int [] a = new int[citations.length + 1];
+        int len = citations.length;
+        for (int i = 0; i < citations.length; i++){
+            if (citations[i] > len) a[len] = a[len] + 1;
+            else a[citations[i]] = a[citations[i]] + 1;
+        }
+        int count = 0;
+        int i = a.length - 1;
+        for (; i >= 0; i--){
+            count = count + a[i];
+            if (count >= i) return i;
+        }
+        return 0;
+    }
+}
