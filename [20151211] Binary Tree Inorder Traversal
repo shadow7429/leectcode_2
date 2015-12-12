@@ -1,0 +1,29 @@
+// startTime: 16: 36
+// finishTime: 16: 50
+// https://leetcode.com/problems/binary-tree-inorder-traversal/
+
+public class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> res = new ArrayList<Integer>();
+        if (root == null) return res;
+        List<TreeNode> l = new ArrayList<TreeNode>();
+        Stack<TreeNode> stack = new Stack<TreeNode>();
+        stack.push(root);
+        while (!stack.isEmpty()){
+            TreeNode head = stack.peek();
+            if (l.contains(head)){
+                res.add(head.val);
+                stack.pop();
+                if (head.right != null && !l.contains(head.right)) stack.push(head.right);
+            }
+            else{
+                if (head.left != null && !l.contains(head.left)) {
+                    stack.push(head.left);
+                    l.add(head);
+                }
+                else l.add(head);
+            }
+        }
+        return res;
+    }
+}
