@@ -1,0 +1,37 @@
+// startTime: 16: 53
+// finishTime: 17: 00
+// https://leetcode.com/problems/binary-search-tree-iterator/
+
+
+/*
+目的就是每次都能最快的得到最小值，所以我们就利用BST的结构特点，将一个BST中序遍历得到的一定是
+一个递增的序列，所以我们就用一个list来存储这个序列，每次求next的时候就返回list的第一个元素就可以
+了。
+*/
+public class BSTIterator {
+    
+    LinkedList<Integer> l = new LinkedList<Integer>();
+    public BSTIterator(TreeNode root) {
+        helper(root);
+        //System.out.println(l.get(0));
+    }
+    
+    public void helper(TreeNode node){
+        if (node == null) return;
+        helper(node.left);
+        l.add(node.val);
+        helper(node.right);
+        return;
+    } 
+    /** @return whether we have a next smallest number */
+    public boolean hasNext() {
+        if (l.size() == 0) return false;
+        else return true;
+    }
+
+    /** @return the next smallest number */
+    public int next() {
+        int i = l.removeFirst();
+        return i;
+    }
+}
