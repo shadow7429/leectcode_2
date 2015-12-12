@@ -1,0 +1,33 @@
+// startTime: 22: 13
+// finishTime: 22: 27
+// https://leetcode.com/problems/populating-next-right-pointers-in-each-node/
+
+public class Solution {
+    public void connect(TreeLinkNode root) {
+        if (root == null) return;
+        LinkedList<TreeLinkNode> l1 = new LinkedList<TreeLinkNode>();
+        LinkedList<TreeLinkNode> l2 = new LinkedList<TreeLinkNode>();
+        l1.add(root);
+        while (!l1.isEmpty() || !l2.isEmpty()){
+            if (l1.isEmpty()){
+                l1.addAll(l2);
+                l2 = new LinkedList<TreeLinkNode>();
+            }
+            else{
+                TreeLinkNode t = l1.removeFirst();
+                TreeLinkNode tl = t.left;
+                TreeLinkNode tr = t.right;
+                if (tl != null && tr != null){
+                    if (!l2.isEmpty()){
+                        l2.get(l2.size() - 1).next = tl;
+                        l2.add(tl);
+                    }
+                    else l2.add(tl);
+                    l2.get(l2.size() - 1).next = tr;
+                    l2.add(tr);
+                }
+            }
+        }
+        return ;
+    }
+}
