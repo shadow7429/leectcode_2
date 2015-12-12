@@ -1,0 +1,29 @@
+// startTime: 22: 32
+// finishTime: 22: 59
+// https://leetcode.com/problems/path-sum-ii/
+
+/*
+需要zhu'yi
+*/
+public class Solution {
+    List<List<Integer>> res;
+    public List<List<Integer>> pathSum(TreeNode root, int sum) {
+        res = new ArrayList<>();
+        if (root == null) return res;
+        helper(root, new ArrayList<Integer>(), sum, 0);
+        return res;
+    }
+    public void helper(TreeNode node, List<Integer> l, int sum, int currentSum){
+        if (node == null) return;
+        currentSum = currentSum + node.val;
+        List<Integer> ltmp = new ArrayList<Integer>();
+        ltmp.addAll(l);
+        ltmp.add(node.val);
+        if (node.left == null && node.right == null && currentSum == sum){
+            res.add(ltmp);
+        }
+        helper(node.left, ltmp, sum, currentSum);
+        helper(node.right, ltmp, sum, currentSum);
+        return;
+    }
+}
