@@ -1,0 +1,34 @@
+// startTime: 16: 17
+// finishTime: 16: 30
+// https://leetcode.com/problems/binary-tree-preorder-traversal/
+
+
+public class Solution {
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<TreeNode> l = new ArrayList<TreeNode>();
+        List<Integer> res = new ArrayList<Integer>();
+        if (root == null) return new ArrayList<Integer>();
+        Stack<TreeNode> stack = new Stack<TreeNode>();
+        stack.add(root);
+        l.add(root);
+        while (!stack.isEmpty()){
+            TreeNode head = stack.peek();
+            int count = 0;
+            if (head.left != null && !l.contains(head.left)){
+                stack.push(head.left);
+                l.add(head.left);
+                count++;
+            }
+            else if (head.right != null && !l.contains(head.right)){
+                stack.push(head.right);
+                l.add(head.right);
+                count++;
+            }
+            if (count == 0) stack.pop();
+        }
+        for (TreeNode t : l){
+            res.add(t.val);
+        }
+        return res;
+    }
+}
