@@ -1,0 +1,24 @@
+// 想复杂了。。。
+// https://leetcode.com/problems/super-ugly-number/
+
+
+/*
+因为当前的factor数量不定，之前我们只是用几个int来存储index，所以只需要用一个index的数组即可。
+*/
+public class Solution {
+    public int nthSuperUglyNumber(int n, int[] primes) {
+        int[] res = new int[n];
+        res[0] = 1;
+        int[] indexes = new int[primes.length];
+        for (int i = 1; i < n; i++){
+            res[i] = Integer.MAX_VALUE;
+            for (int j = 0; j < primes.length; j++){
+                res[i] = Math.min(res[i], primes[j] * res[indexes[j]]);
+            }
+            for (int j = 0; j < indexes.length; j++){
+                if (res[i] == primes[j] * res[indexes[j]]) indexes[j]++;
+            }
+        }
+        return res[n - 1];
+    }
+}
