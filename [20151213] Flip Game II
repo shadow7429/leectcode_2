@@ -1,0 +1,29 @@
+// 锁住了的题
+/*
+Problem Description:
+You are playing the following Flip Game with your friend: Given a string that contains only these two characters: + and -, you and your friend take turns to flip two consecutive "++" into "--". 
+The game ends when a person can no longer make a move and therefore the other person will be the winner.
+Write a function to determine if the starting player can guarantee a win.
+For example, given s = "++++", return true. The starting player can guarantee a win by flipping the middle "++" to become "+--+".
+*/
+/*
+这道题我想的太麻烦了，还想着checkterminal，其实在遍历的过程中，如果都没有存在复合if判断条件的，那么就说明
+现在是terminal了，所以就返回false就好。并且当前返回true的条件是在下一轮返回false。
+*/
+public boolean canWin(String s){
+    if (s.length() == 0) return false;
+    return canWin(s.toCharArray());
+}
+public boolean canWin(char[] c){
+    for (int i = 0; i < c.length - 1; i++){
+        if (c[i] == '+' && c[i + 1] == '+'){
+            c[i] = '-';
+            c[i + 1] = '-';
+            boolean win = ! canWin(c);
+            c[i] = '+';
+            c[i + 1] = '+';
+            if (win) return true;
+        }
+    }
+    return false;
+}
