@@ -1,0 +1,62 @@
+// https://leetcode.com/problems/add-and-search-word-data-structure-design/
+
+/*
+这里用到的结构就是TrieNode也就是prefix tree。然后总是忽略的一点是isWord这个变量。
+在search的时候，如果遇到了'.'那么就得对当前root的所有子节点进行递归，若是有一个
+为true则返回true。否则的话，就正常的递归调用即可。
+*/
+
+public class WordDictionary {
+    class TrieNode{
+        TrieNode[] children;
+        char value;
+        boolean isWord;
+        public TrieNode(char v){
+            children = new TrieNode[26];
+            value = v;
+        }
+    }
+    TrieNode root;
+    // Adds a word into the data structure.
+    public void addWord(String word) {
+        if (root == null) root = new TrieNode(' ');
+        TrieNode r = root;
+        for (int i = 0; i < word.length(); i++){
+            char c = word.charAt(i);
+            if (r.children[c - 'a'] == null){
+                r.children[c - 'a'] = new TrieNode(c);
+            }
+            r = r.children[c - 'a'];
+        }
+        r.isWord = true;
+        return;
+    }
+
+    // Returns if the word is in the data structure. A word could
+    // contain the dot character '.' to represent any one letter.
+    public boolean search(String word) {
+        if (root == null) return false;
+        return helper(word, 0, root);
+    }
+    public boolean helper(String word, int index, TrieNode node){
+        if (index == word.length()) {
+            return node.isWord;
+        }
+        int i = index;
+        TrieNode[] childrens = node.children;
+        if (childrens == null) return false;
+        char c = word.charAt(index);
+        if (c == '.'){
+            for (TrieNode n : childrens){
+                if (n != null){
+                    boolean b = helper(word, index + 1, n);
+                    if (b) return true;
+                }
+            }
+            return false;
+        }
+        TrieNode ntmp = childrens[c - 'a'];
+        if (ntmp == null) return false;
+        return helper(word, index + 1, ntmp);
+    }
+}
