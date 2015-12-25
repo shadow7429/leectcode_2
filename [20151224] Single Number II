@@ -1,0 +1,23 @@
+// https://leetcode.com/problems/single-number-ii/
+
+
+/*
+用一个set1来记录出现过的integer，一个set2来记录出现过两次的integer，如果一个重复出现的数字之前已经出现了两次了，就将
+它从set1中移除，所以最后set1中剩余的就是只出现了一次的那个数字。
+*/
+public class Solution {
+    public int singleNumber(int[] nums) {
+        Set<Integer> set1 = new HashSet<Integer>();
+        Set<Integer> set2 = new HashSet<Integer>();
+        for (int i : nums){
+            if (set1.add(i) == false){
+                if (set2.add(i) == false) set1.remove(new Integer(i));
+            }
+        }
+        Iterator<Integer> it = set1.iterator();  //------------------------注意这里如果Iterator没有伴随尖括号生命为Integer型的，
+                                                 //------------------------下面就不能用intValue函数了。
+        int res = 0;
+        while(it.hasNext()) res = it.next().intValue(); 
+        return res;
+    }
+}
