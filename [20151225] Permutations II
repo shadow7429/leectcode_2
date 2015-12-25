@@ -1,0 +1,52 @@
+// https://leetcode.com/problems/permutations-ii/
+
+
+// brute one:
+public class Solution {
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        List<List<Integer>> res = new ArrayList<List<Integer>>();
+        if (nums == null || nums.length == 0) return res;
+        Arrays.sort(nums);
+        res.add(new ArrayList<Integer>());
+        for (int i : nums){
+            List<List<Integer>> resTmp = new ArrayList<List<Integer>>();
+            for (List<Integer> l : res){
+                List<Integer> ltmp = new ArrayList<Integer>(l);
+                for (int j = 0; j <= l.size(); j++){
+                    ltmp = new ArrayList<Integer>(l);
+                    ltmp.add(j, i);
+                    if (!resTmp.contains(ltmp)) resTmp.add(ltmp);
+                }
+            }
+            res.clear();
+            res.addAll(resTmp);
+        }
+        return res;
+    }
+}
+
+// Discuss
+/*
+在求unique的时候一般都是用set，这里要注意set和list的转化用法，而且这里set并不用clear直接赋值即可。
+*/
+public class Solution {
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        Set<List<Integer>> res = new HashSet<List<Integer>>();
+        if (nums == null || nums.length == 0) return new ArrayList<List<Integer>>(res);
+        Arrays.sort(nums);
+        res.add(new ArrayList<Integer>());
+        for (int i : nums){
+            Set<List<Integer>> resTmp = new HashSet<List<Integer>>();
+            for (List<Integer> l : res){
+                List<Integer> ltmp = new ArrayList<Integer>(l);
+                for (int j = 0; j <= l.size(); j++){
+                    ltmp = new ArrayList<Integer>(l);
+                    ltmp.add(j, i);
+                    resTmp.add(ltmp);
+                }
+            }
+            res = resTmp;
+        }
+        return new ArrayList<List<Integer>>(res);
+    }
+}
