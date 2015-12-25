@@ -1,0 +1,43 @@
+// https://leetcode.com/problems/maximum-product-of-word-lengths/
+
+/*
+正常的思路很简单，但是因为数据中的string可能有非常高的char重复，例如数组可能是：
+["aaaaaaaaaaaaaaaaa","bbbbbbbbbbbbbbbbbbb","ccccccccccccccccccc"]这样在helper中，每次都要遍历string来比较两个string是否是完全
+不同的，所以我们最开始的时候利用另一个数组wordsTmp来记录下来每个string中unique的字符，然后每一次向helper中传递的都是words中
+string对应的wordsTmp中的string这样省去了很多重复的工作。然后对于set的使用，set不能toString直接变成string类型。
+*/
+public class Solution {
+    public int maxProduct(String[] words) {
+        if (words == null || words.length == 0) return 0;
+        int res = 0;
+        
+        String[] wordsTmp = new String[words.length];
+        Arrays.fill(wordsTmp, "");
+        for (int i = 0; i < words.length; i++){
+            Set<Character> set = new HashSet<Character>();
+            String s = words[i];
+            for (int j = 0; j < s.length(); j++){
+                if(set.add(s.charAt(j))) wordsTmp[i] = wordsTmp[i] + s.charAt(j);
+            }
+        }
+        
+        for (int i = 0; i < words.length - 1; i++){
+            String s1 = words[i];
+            for (int j = i + 1; j < words.length; j++){
+                String s2 = words[j];
+                if (helper(wordsTmp[i], wordsTmp[j]) == true) {
+                    res = Math.max(s1.length() * s2.length(), res);
+                }
+            }
+        }
+        return res;
+    }
+    
+    public boolean helper(String s1, String s2){
+        for (int i = 0; i < s1.length(); i++){
+            char c = s1.charAt(i);
+            if (s2.indexOf(c) >= 0) return false;
+        }
+        return true;
+    }
+}
