@@ -1,0 +1,67 @@
+// https://leetcode.com/problems/course-schedule/
+
+// brute 
+public class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        if (prerequisites == null || prerequisites.length == 0 || prerequisites[0].length == 0) return true;
+        Set<Integer> post = new HashSet<Integer>();
+        Map<Integer, List<Integer>> pair = new HashMap<>();
+        Set<Integer> set = new HashSet<Integer>();
+        for (int i = 0; i < prerequisites.length; i++){
+            for (int j = 0; j < 2; j++){
+                post.add(prerequisites[i][0]);
+                if (!pair.containsKey(prerequisites[i][1])){
+                    pair.put(prerequisites[i][1], new ArrayList<Integer>());
+                }
+                pair.get(prerequisites[i][1]).add(prerequisites[i][0]);
+            }
+        }
+        helper(post, set, pair);
+        if (set.size() == post.size()) return true;
+        else return false;
+    }
+    public void helper(Set<Integer> post, Set<Integer> set, Map<Integer, List<Integer>> pair){
+        int orisize = set.size();
+        Set<Integer> keyset = pair.keySet();
+        Iterator<Integer> keys = keyset.iterator();
+        while (keys.hasNext()){
+            int key = keys.next();
+            if (!post.contains(key) || set.contains(key)){
+                List<Integer> l = pair.get(key);
+                for (int i : l) set.add(i);
+            }
+        }
+        if (orisize < set.size()) helper(post, set, pair);
+        return;
+    }
+}
+
+// 迭代可以换位queue或者stack的结构
+
+public class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        int[][] matrix = new int[numCourses][numCourses];
+        int[] indegree = new int[numCourses];
+        for (int i = 0; i < prerequisites.length; i++){
+            int ready = prerequisites[i][0];
+            int pre = prerequisites[i][1];
+            if (matrix[pre][ready] == 0) indegree[ready]++;
+            matrix[pre][ready] = 1;
+        }
+        int count = 0;
+        Queue<Integer> queue = new LinkedList();
+        for (int i = 0; i < indegree.length; i++){
+            if (indegree[i] == 0) queue.offer(i);
+        }
+        while(! queue.isEmpty()){
+            int course = queue.poll();
+            count++;
+            for (int i = 0; i < numCourses; i++){
+                if (matrix[course][i] != 0){
+                    if (--indegree[i] == 0) queue.offer(i);
+                }
+            }
+        }
+        return count == numCourses;
+    }
+}
