@@ -1,0 +1,35 @@
+// https://leetcode.com/problems/additive-number/
+
+/*
+要注意对于0的判断，不能首字母是0就false，因为单独的0是可以的，所以要在charAt(0)的基础上加上lengh的判断。
+并且因为数字可能非常大，所以应该用Long型。
+*/
+public class Solution {
+    public boolean isAdditiveNumber(String num) {
+        if (num.length() < 3) return false;
+        for (int i = 1; i < num.length(); i++){
+            String s1 = num.substring(0, i);
+            for (int j = i + 1; j < num.length(); j++){
+                String s2 = num.substring(i, j);
+                if (helper(s1, s2, j, num) == true) return true;
+            }
+        }
+        return false;
+    }
+    public boolean helper(String n1, String n2, int index, String num){
+        if ((n1.charAt(0) == '0' && n1.length() > 1) || 
+             n2.charAt(0) == '0' && n2.length() > 1) return false;   
+        if (index >= num.length()) return true;
+        long num1 = Long.valueOf(n1);
+        long num2 = Long.valueOf(n2);
+        for (int i = index + 1; i <= num.length(); i++){
+            String n3 = num.substring(index, i);
+            long num3 = Long.valueOf(n3);
+            if (num3 > num1 + num2) return false;
+            else if (num3 == num1 + num2){
+                if (helper(n2, n3, i, num) == true) return true;
+            }
+        }
+        return false;
+    }
+}
