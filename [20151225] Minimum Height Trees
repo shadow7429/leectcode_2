@@ -1,0 +1,88 @@
+// https://leetcode.com/problems/minimum-height-trees/
+
+// brute Solution
+public class Solution {
+    public List<Integer> findMinHeightTrees(int n, int[][] edges) {
+        LinkedList<Integer> res = new LinkedList<Integer>();
+        if (edges == null || edges.length == 0 || edges[0].length == 0) return res;
+        int[][] e = new int[n][n];
+        for (int i = 0; i < edges.length; i++){
+            int x = edges[i][0];
+            int y = edges[i][1];
+            e[x][y] = 1;
+            e[y][x] = 1;
+        }
+        
+        int maxHeight = Integer.MAX_VALUE;
+        for (int i = 0; i < n; i++){
+            Set<Integer> set = new HashSet<Integer>();
+            LinkedList<Integer> q = new LinkedList<Integer>();
+            LinkedList<Integer> p = new LinkedList<Integer>();
+            q.add(i);
+            int count = 0;
+            while (!q.isEmpty() || !p.isEmpty()){
+                if (q.isEmpty()){
+                    count++;
+                    q = new LinkedList<Integer>(p);
+                    p = new LinkedList<Integer>();
+                    continue;
+                }
+                int vertice = q.removeFirst();
+                set.add(vertice);
+                for (int j = 0; j < e[vertice].length; j++){
+                    if (!set.contains(j) && e[vertice][j] == 1) {
+                        p.add(j);
+                    }
+                }
+            }
+            if (count < maxHeight){
+                res = new LinkedList<Integer>();
+                res.add(i);
+                maxHeight = count;
+            }
+            else if (count == maxHeight) res.add(i);
+        }
+        return res;
+    }
+}
+
+//Discuss
+/*
+Discuss上面聪明得方法是从下到上一层层的进行寻找。
+*/
+public List<Integer> findMinHeightTrees(int n, int[][] edges) {
+    Set<Integer> []adj = (Set<Integer>[]) new HashSet[n];
+    Set<Integer> ans = new HashSet<>();
+    for (int i = 0; i < n; ++i) {
+        ans.add(i);
+    }
+    for (int i = 0; i < n; i++) {
+        adj[i] = new HashSet<>();
+    }
+    for (int i = 0; i < n - 1; i++) {                   //--------------在有n个节点的树中，应该有n-1条边
+        int from = edges[i][0];
+        int to = edges[i][1];
+        adj[from].add(to);
+        adj[to].add(from);
+    }
+
+    Set<Integer> leaves = new HashSet<>();
+    while(ans.size() > 2) {
+        for (int v : ans) {
+            if (adj[v].size() == 1) {
+                leaves.add(v);
+            }
+        }
+        ans.removeAll(leaves);
+        Set<Integer> nxtLeaves = new HashSet<>();
+        for (int v : leaves) {
+            int adjNode = adj[v].iterator().next();
+            adj[adjNode].remove(v);
+            if (adj[adjNode].size() == 1) {
+                nxtLeaves.add(adjNode);
+            }
+        }
+        leaves = nxtLeaves;
+    }
+    return new ArrayList<>(ans);
+}
