@@ -1,0 +1,21 @@
+// https://leetcode.com/problems/word-break/
+
+
+/*
+思路就是如果前面i位的字符串是可以wordBreak的，并且substring(i, j)是在wordDict里面的，那么
+就说明前面j位的字符串是可以wordBreak的，同理推导出整个string s。
+*/
+public class Solution {
+    public boolean wordBreak(String s, Set<String> wordDict) {
+        if (s.length() == 0) return false;
+        boolean[] dp = new boolean[s.length() + 1];
+        dp[0] = true;
+        for (int i = 1; i <= s.length(); i++){
+            for (int j = 0; j < i; j++){
+                String tmp = s.substring(j, i);
+                if (dp[j] == true && wordDict.contains(tmp)) dp[i] = true;
+            }
+        }
+        return dp[s.length()];
+    }
+}
