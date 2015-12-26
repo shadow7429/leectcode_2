@@ -1,0 +1,32 @@
+// https://leetcode.com/problems/clone-graph/
+
+public class Solution {
+    public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
+        if (node == null) return null;
+        Set<Integer> set = new HashSet<Integer>();
+        HashMap<Integer, UndirectedGraphNode> nodes = new HashMap<Integer, UndirectedGraphNode>();
+        
+        LinkedList<UndirectedGraphNode> l = new LinkedList<>();
+        l.add(node);
+        int reslabel = node.label;
+        while (!l.isEmpty()){
+            UndirectedGraphNode tmpNode = l.removeFirst();
+            set.add(tmpNode.label);
+            if (!nodes.containsKey(tmpNode.label)) nodes.put(tmpNode.label, new UndirectedGraphNode(tmpNode.label));
+            List<UndirectedGraphNode> tmpNeighbors = tmpNode.neighbors;
+            if (tmpNeighbors.size() == 0) continue;
+            if (nodes.get(tmpNode.label).neighbors.size() > 0) continue;  //-------------------这一步如果不加，会造成相同的child往l
+                                                                          //-------------------里重复加入的情况。
+            for (UndirectedGraphNode tmpN : tmpNeighbors){
+                if (!set.contains(tmpN.label)) l.add(tmpN);
+                if (!nodes.containsKey(tmpN.label)){
+                    UndirectedGraphNode child = new UndirectedGraphNode(tmpN.label);
+                    nodes.get(tmpNode.label).neighbors.add(child);
+                    nodes.put(child.label, child);
+                }
+                else nodes.get(tmpNode.label).neighbors.add(nodes.get(tmpN.label));
+            }
+        }
+        return nodes.get(reslabel);
+    }
+}
